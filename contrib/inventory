@@ -7,3 +7,5 @@ services:
       protocol: tcp
       unit: syncthing@.service 
 verbose: false
+location: office
+description: 2U rackmount server

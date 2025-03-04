@@ -210,6 +210,7 @@ templ layout(name string, reports []types.Report) {
 }
 
 templ hostsList(reports []types.Report) {
+	@hostTable(reports)
 	@serviceTable(reports)
 	@containerTable(reports)
 	@listenerTable(reports)
@@ -397,6 +398,42 @@ templ serviceTable(reports []types.Report) {
 								</td>
 							</tr>
 						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+}
+
+templ hostTable(reports []types.Report) {
+	<div class="card mb-4">
+		<div class="card-header border-0">
+			<h3 class="card-title">Servers</h3>
+		</div>
+		<div class="card-body table-responsive p-0">
+			<table class="table table-striped align-middle">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>IP</th>
+						<th>Location</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, report := range reports {
+						<tr>
+							<td>
+								{ report.Host.HostName }
+							</td>
+							<td>
+								{ report.Host.IP }
+							</td>
+							<td>{ report.Host.Location }</td>
+							<td>
+								{ report.Host.Description }
+							</td>
+						</tr>
 					}
 				</tbody>
 			</table>
