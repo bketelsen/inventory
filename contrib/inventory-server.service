@@ -1,0 +1,20 @@
+[Unit]
+Description=Inventory Server
+After=network.target
+Requires=network.target
+
+[Service]
+Type=notify
+
+Restart=always
+RestartSec=30
+TimeoutStartSec=0
+
+WorkingDirectory=/home/bjk
+ExecStart=/usr/local/bin/inventory serve
+User=bjk
+Group=bjk
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

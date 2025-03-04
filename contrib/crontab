@@ -1,0 +1,1 @@
+*/2 * * * * /usr/local/bin/inventory send  >> /var/log/inventory.log 2>&1

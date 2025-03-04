@@ -1,0 +1,9 @@
+server:
+  address: "10.0.1.165:9999"
+services:
+    - name: syncthing
+      port: 8384
+      listenaddress: 10.0.0.165
+      protocol: tcp
+      unit: syncthing@.service 
+verbose: false

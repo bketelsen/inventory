@@ -1,0 +1,52 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  build:
+    cmds:
+      - templ generate
+      - go build
+    silent: true
+  serve:
+    cmds:
+      - go run main.go serve
+    silent: true
+  send:
+    cmds:
+      - go run main.go send
+    silent: true
+  tools:
+    cmds:
+      - go install github.com/a-h/templ/cmd/templ@latest
+
+  install:
+    cmds:
+      - echo "Installing server locally"  
+      - sudo cp ./inventory /usr/local/bin/inventory
+  release-snapshot:
+    cmds:
+      - goreleaser release --snapshot --clean
+    silent: true
+  release-check:
+    cmds:
+      - goreleaser check
+    silent: true
+  publish:
+    cmds:
+      - git push origin
+      - git tag v{{.VERSION}}
+      - git push --tags
+  direnv:
+    cmds:
+      - direnv hook bash >> ~/.bashrc
+    silent: true
+  goreleaser:
+    cmds:
+      - wget https://github.com/goreleaser/goreleaser-pro/releases/download/v2.7.0-pro/goreleaser-pro_2.7.0_amd64.deb
+      - sudo dpkg -i goreleaser-pro_2.7.0_amd64.deb 
+      - rm goreleaser-pro_2.7.0_amd64.deb 
+    silent: true
