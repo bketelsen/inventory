@@ -49,6 +49,12 @@ func (r *Reporter) Send() error {
 		return err
 	}
 	report.Host = host
+	if config.Location != "" {
+		report.Host.Location = config.Location
+	}
+	if config.Description != "" {
+		report.Host.Description = config.Description
+	}
 	report.Listeners, err = GetListeners()
 	if err != nil {
 		log.Println("Error getting listeners:", err)

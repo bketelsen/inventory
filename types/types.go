@@ -36,8 +36,10 @@ type Report struct {
 }
 
 type Host struct {
-	HostName string
-	IP       string
+	HostName    string
+	IP          string
+	Location    string
+	Description string
 }
 
 type Service struct {
