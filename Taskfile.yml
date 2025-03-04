@@ -3,7 +3,7 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  VERSION: 0.1.0
 
 tasks:
   build:
