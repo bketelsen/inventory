@@ -1,5 +1,5 @@
 ---
-date: 2025-03-05T01:43:38Z
+date: 2025-03-05T18:32:34Z
 title: "inventory completion powershell"
 slug: inventory_completion_powershell
 url: /docs/cli/inventory_completion_powershell/

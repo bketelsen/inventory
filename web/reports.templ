@@ -273,7 +273,7 @@ templ statistic(value string, label string) {
 }
 
 templ reports(reports []types.Report) {
-	@layout("Homelab Services", reports) {
+	@layout("Inventory | Services", reports) {
 		@contentHeader("All")
 		@appContent() {
 			<h5 class="mb-2">All Hosts</h5>

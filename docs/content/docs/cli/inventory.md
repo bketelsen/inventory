@@ -1,5 +1,5 @@
 ---
-date: 2025-03-05T01:43:38Z
+date: 2025-03-05T18:32:34Z
 title: "inventory"
 slug: inventory
 url: /docs/cli/inventory/
@@ -48,6 +48,7 @@ inventory server --verbose --config /path/to/config.yaml // specify a config fil
 ### SEE ALSO
 
 * [inventory completion](/docs/cli/inventory_completion/)	 - Generate the autocompletion script for the specified shell
+* [inventory search](/docs/cli/inventory_search/)	 - search for services or containers
 * [inventory send](/docs/cli/inventory_send/)	 - Send host and container information to the server
 * [inventory serve](/docs/cli/inventory_serve/)	 - Serve starts the RPC and HTTP servers
 
