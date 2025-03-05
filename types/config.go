@@ -1,8 +1,6 @@
 package types
 
 import (
-	"log"
-
 	"github.com/spf13/viper"
 )
 
@@ -22,7 +20,6 @@ type Server struct {
 
 func ReadConfig() (Config, error) {
 	var c Config
-	log.Println(viper.ConfigFileUsed())
 	err := viper.Unmarshal(&c)
 	return c, err
 }
