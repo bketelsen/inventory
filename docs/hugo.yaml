@@ -1,4 +1,4 @@
-baseURL: https://example.org/
+baseURL: https://bketelsen.github.io/inventory/
 languageCode: en-us
 title: Inventory 
 # https://imfing.github.io/hextra/
@@ -69,7 +69,7 @@ menu:
       url: "https://linuxcontainers.org/incus/docs/main/"
       weight: 2
 params:
-  description: Modern, responsive, batteries-included Hugo theme for creating beautiful static websites.
+  description: Track your deployed containers and virtual machines. 
 
   navbar:
     displayTitle: true
