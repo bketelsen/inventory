@@ -109,7 +109,9 @@ func initConfig() {
 
 			}
 		} else {
-			log.Println("Using config file:", viper.ConfigFileUsed())
+			if viper.GetBool("verbose") {
+				log.Println("Using config file:", viper.ConfigFileUsed())
+			}
 		}
 	}
 	viper.AutomaticEnv() // read in environment variables that match

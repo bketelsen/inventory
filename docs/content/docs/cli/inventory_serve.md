@@ -1,5 +1,5 @@
 ---
-date: 2025-03-05T01:43:38Z
+date: 2025-03-05T18:32:34Z
 title: "inventory serve"
 slug: inventory_serve
 url: /docs/cli/inventory_serve/

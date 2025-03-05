@@ -18,25 +18,22 @@ import (
 	config "github.com/lxc/incus/v6/shared/cliconfig"
 )
 
-type Reporter struct {
+type Client struct {
+	config types.Config
 }
 
-func NewReporter() *Reporter {
-	return &Reporter{}
-}
-func (r *Reporter) Send() error {
-	// Read config
-	config, err := types.ReadConfig()
-	if err != nil {
-		log.Println("Error reading config:", err)
-		return err
+func NewClient(config types.Config) *Client {
+	return &Client{
+		config: config,
 	}
+}
+func (r *Client) Send() error {
 
-	log.Println("Verbose mode:", config.Verbose)
-	log.Println("Server address:", config.Server.Address)
-	cl, err := rpc.Dial("tcp", config.Server.Address) // Connect to server using config
+	log.Println("Verbose mode:", r.config.Verbose)
+	log.Println("Server address:", r.config.Server.Address)
+	cl, err := rpc.Dial("tcp", r.config.Server.Address) // Connect to server using config
 	if err != nil {
-		log.Printf("Error connecting to %s: %v", config.Server.Address, err)
+		log.Printf("Error connecting to %s: %v", r.config.Server.Address, err)
 		return err
 	}
 	defer cl.Close()
@@ -49,11 +46,11 @@ func (r *Reporter) Send() error {
 		return err
 	}
 	report.Host = host
-	if config.Location != "" {
-		report.Host.Location = config.Location
+	if r.config.Location != "" {
+		report.Host.Location = r.config.Location
 	}
-	if config.Description != "" {
-		report.Host.Description = config.Description
+	if r.config.Description != "" {
+		report.Host.Description = r.config.Description
 	}
 	report.Listeners, err = GetListeners()
 	if err != nil {
@@ -73,7 +70,7 @@ func (r *Reporter) Send() error {
 	report.Containers = append(report.Containers, dockerContainers...)
 	report.Containers = append(report.Containers, incusContainers...)
 
-	report.Services = config.Services
+	report.Services = r.config.Services
 	var result int
 
 	// Call Update method on the server
@@ -85,6 +82,27 @@ func (r *Reporter) Send() error {
 
 	log.Println("server response:", result)
 	return nil
+
+}
+
+func (r *Client) Search(query string) ([]types.Report, error) {
+
+	cl, err := rpc.Dial("tcp", r.config.Server.Address) // Connect to server using config
+	if err != nil {
+		log.Printf("Error connecting to %s: %v", r.config.Server.Address, err)
+		return []types.Report{}, err
+	}
+	defer cl.Close()
+
+	var result []types.Report
+	// Call Search method on the server
+	err = cl.Call("InventoryServer.Search", query, &result)
+	if err != nil {
+		log.Println("Error calling InventoryServer.Search:", err)
+		return []types.Report{}, err
+	}
+
+	return result, nil
 
 }
 

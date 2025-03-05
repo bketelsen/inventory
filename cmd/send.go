@@ -25,6 +25,7 @@ import (
 	"log"
 
 	"github.com/bketelsen/inventory/client"
+	"github.com/bketelsen/inventory/types"
 
 	"github.com/spf13/cobra"
 )
@@ -45,9 +46,16 @@ and sends it to the server. It is designed to be run as a cron job or systemd ti
 It is not intended to be run interactively.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// Read config
+		config, err := types.ReadConfig()
+		if err != nil {
+			log.Println("Error reading config:", err)
+			return err
+		}
+
 		// Get server address from config or use default
-		cl := client.NewReporter()
-		err := cl.Send()
+		cl := client.NewClient(config)
+		err = cl.Send()
 		if err != nil {
 			log.Printf("Error sending report: %v", err)
 			return err

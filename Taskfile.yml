@@ -3,7 +3,7 @@
 version: '3'
 
 vars:
-  VERSION: 0.1.3
+  VERSION: 0.2.0
 
 tasks:
   build:
@@ -58,7 +58,7 @@ tasks:
     silent: true
   site:
     desc: Run hugo dev server
-    deps: [build]
+    deps: [build, generate]
     dir: docs
     cmds:
       - hugo server --buildDrafts --disableFastRender

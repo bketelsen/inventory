@@ -9,7 +9,9 @@ before:
     - go mod tidy
     - go install github.com/a-h/templ/cmd/templ@latest
     - templ generate
-
+after:
+  hooks:
+    - go run main.go docs
 builds:
   - env:
       - CGO_ENABLED=0

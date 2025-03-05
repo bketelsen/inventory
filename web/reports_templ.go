@@ -573,7 +573,7 @@ func reports(reports []types.Report) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layout("Homelab Services", reports).Render(templ.WithChildren(ctx, templ_7745c5c3_Var20), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout("Inventory | Services", reports).Render(templ.WithChildren(ctx, templ_7745c5c3_Var20), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -43,6 +43,10 @@ menu:
       name: Documentation
       pageRef: /docs
       weight: 1
+    - identifier: guides
+      name: Guides
+      pageRef: /docs/guides
+      weight: 2
     - name: Search
       weight: 5
       params:
@@ -89,8 +93,8 @@ params:
 
   footer:
     enable: true
-    displayCopyright: true
-    displayPoweredBy: true
+    displayCopyright: false
+    displayPoweredBy: false
     width: normal
 
   # Display the last modification date
