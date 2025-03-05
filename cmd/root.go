@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -34,7 +35,16 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "inventory",
+	Use: "inventory",
+	Example: `//client
+inventory send
+inventory send --verbose // more verbose output
+inventory send --verbose --config /path/to/config.yaml // specify a config file
+
+//server
+inventory server
+inventory server --verbose // more verbose output
+inventory server --verbose --config /path/to/config.yaml // specify a config file`,
 	Short: "Inventory is a tool to collect and report deployment information",
 	Long: `Inventory is a tool to collect and report deployment information
 to a central server. It collects information about the host,
@@ -43,15 +53,7 @@ The reporting command is designed to be run as a cron job or systemd timer.
 
 It is not intended to be run interactively.
 
-Example client usage:
-  inventory send
-  inventory send --verbose
-  inventory send --verbose --config /path/to/config.yaml
-  
- Example server usage:
-  inventory server
-  inventory server --verbose
-  inventory server --verbose --config /path/to/config.yaml
+
 
 Inventory listens for http requests on port 8000 by default.
 Inventory listens for rpc requests on port 9000 by default.
@@ -82,7 +84,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Verbose logging")
+	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose logging")
 	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 }
 
@@ -100,9 +102,15 @@ func initConfig() {
 		viper.AddConfigPath(".")                // optionally look for config in the working directory
 		err := viper.ReadInConfig()             // Find and read the config file
 		if err != nil {                         // Handle errors reading the config file
-			panic(fmt.Errorf("fatal error config file: %w", err))
+			if strings.Contains(err.Error(), "control characters") {
+				log.Println("No config file found, using defaults")
+			} else {
+				log.Println(fmt.Errorf("fatal error config file: %w", err))
+
+			}
+		} else {
+			log.Println("Using config file:", viper.ConfigFileUsed())
 		}
-		log.Println("Using config file:", viper.ConfigFileUsed())
 	}
 	viper.AutomaticEnv() // read in environment variables that match
 

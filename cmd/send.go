@@ -33,16 +33,17 @@ import (
 var sendCmd = &cobra.Command{
 	Use:   "send",
 	Short: "Send host and container information to the server",
+	Example: `inventory send
+// more verbose output
+inventory send --verbose
+// specify a config file
+inventory send --verbose --config /path/to/config.yaml`,
+
 	Long: `Send host and container information to the server
 This command collects information about the host and docker/incus containers
 and sends it to the server. It is designed to be run as a cron job or systemd timer.
 It is not intended to be run interactively.
-
-Example usage:
-  inventory send
-  inventory send --verbose
-  inventory send --verbose --config /path/to/config.yaml
-  `,
+`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// Get server address from config or use default
 		cl := client.NewReporter()

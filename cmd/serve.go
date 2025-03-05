@@ -98,9 +98,9 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
-	serveCmd.PersistentFlags().IntP("http-port", "w", 8000, "HTTP Port")
+	serveCmd.PersistentFlags().IntP("http-port", "w", 8000, "HTTP port")
 	viper.BindPFlag("http_port", serveCmd.PersistentFlags().Lookup("http-port"))
-	serveCmd.PersistentFlags().IntP("rpc-port", "r", 9999, "RPC Port")
+	serveCmd.PersistentFlags().IntP("rpc-port", "r", 9999, "RPC port")
 	viper.BindPFlag("rpc_port", serveCmd.PersistentFlags().Lookup("rpc-port"))
 
 	// Cobra supports local flags which will only run when this command
