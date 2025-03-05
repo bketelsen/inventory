@@ -2,7 +2,7 @@
 title: 'Documentation'
 ---
 
-Inventory is a single-binary application that includes a server, a client, and a CLI. 
+Inventory is a single-binary application that includes a server/collector, a reporter, and a CLI. 
 
 
 
@@ -34,6 +34,14 @@ The Inventory reporter collects information about services, containers, and netw
 Container details for Docker and Incus are collected automatically.
 
 You can manually specify services you want to track by adding them to the [configuration file](#configuration). This is useful for services that are installed directly on the host, not in a container runtime. 
+
+Run the reporter manually from the terminal:
+
+```bash
+$ inventory send
+```
+
+Or set up a SystemD timer or crontab entry to run it. See the [contrib](https://github.com/bketelsen/inventory/tree/main/contrib) directory for some examples.
 
 The Inventory reporter can not be run without a [configuration](#configuration) file in place.
 
