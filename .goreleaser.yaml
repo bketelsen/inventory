@@ -22,6 +22,10 @@ builds:
       - arm64
     binary: inventory
     id: inventory
+    # Default: '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser'.
+    # Templates: allowed.
+    ldflags:
+      - '-s -w -X github.com/bketelsen/inventory/cmd.version={{.Version}} -X github.com/bketelsen/inventory/cmd.commit={{.Commit}}'
 
 archives:
   - formats: [ 'tar.gz' ]
@@ -63,7 +67,7 @@ announce:
     #
     # Default: '{{ .ProjectName }} {{ .Tag }} is out! Check it out at {{ .ReleaseURL }}'.
     # Templates: allowed.
-    message_template: "Release announcement: {{ .ProjectName }} {{ .Tag }} is out! Check it out at {{ .ReleaseURL }}"
+    message_template: "Fresh bits hot off the pipeline!\n\n{{ .ProjectName }} {{ .Tag }} is out! Check it out at {{ .ReleaseURL }}\n\nUse {{ .ProjectName }} to track your deployed containers and virtual machines."
 
     # The username of the account that will post
     # to Bluesky

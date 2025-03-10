@@ -3,13 +3,41 @@
 version: '3'
 
 vars:
-  VERSION: 0.2.0
+  VERSION: 0.2.1
 
 tasks:
   build:
     cmds:
       - templ generate
-      - go build
+      - go build -o inventory-cli -ldflags '-s -w -X github.com/bketelsen/inventory/cmd.version={{.VERSION}}-dev' main.go
+    silent: true
+  test:
+    cmds:
+      - go test ./...
+    silent: true
+  format: 
+    cmds:
+      - gofmt -w -s .
+    silent: true
+  vet: 
+    cmds:
+      - go vet ./...
+    silent: true
+  staticcheck: 
+    cmds:
+      - staticcheck ./...
+    silent: true
+  tidy: 
+    cmds:
+      - go mod tidy
+    silent: true
+  checks:
+    cmds:
+      - task staticcheck
+      - task vet
+      - task test
+      - task format
+      - task tidy
     silent: true
   serve:
     cmds:
@@ -22,13 +50,13 @@ tasks:
   tools:
     cmds:
       - go install github.com/a-h/templ/cmd/templ@latest
-      - go install github.com/spf13/cobra-cli@latest
+      - go install github.com/bketelsen/toolbox/starter@latest
 
   install:
     cmds:
       - echo "Installing server locally"  
       - sudo cp ./inventory /usr/local/bin/inventory
-  release-snapshot:
+  snapshot:
     cmds:
       - goreleaser release --snapshot --clean
     silent: true

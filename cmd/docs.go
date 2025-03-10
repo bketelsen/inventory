@@ -6,14 +6,15 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 	"path"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"github.com/spf13/cobra"
+	"github.com/bketelsen/toolbox/cobra"
 
-	"github.com/spf13/cobra/doc"
+	"github.com/bketelsen/toolbox/cobra/doc"
 )
 
 // docsCmd represents the docs command
@@ -22,6 +23,7 @@ var docsCmd = &cobra.Command{
 	Hidden: true,
 	Short:  "Generate documentation for the project",
 	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Logger.Info("Generating documentation...")
 		linkHandler := func(name string) string {
 			base := strings.TrimSuffix(name, path.Ext(name))
 			return "/docs/cli/" + strings.ToLower(base) + "/"
@@ -34,7 +36,11 @@ var docsCmd = &cobra.Command{
 			return fmt.Sprintf(fmTemplate, now, strings.Replace(base, "_", " ", -1), base, url)
 		}
 
-		err := doc.GenMarkdownTreeCustom(rootCmd, "./docs/content/docs/cli/", filePrepender, linkHandler)
+		err := os.MkdirAll("./docs/content/docs/cli/", 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = doc.GenMarkdownTreeCustom(rootCmd, "./docs/content/docs/cli/", filePrepender, linkHandler)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -22,7 +22,9 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"log"
+	"log/slog"
 	"net"
 	"net/http"
 	"net/rpc"
@@ -31,8 +33,8 @@ import (
 	"github.com/bketelsen/inventory/storage"
 	"github.com/bketelsen/inventory/types"
 	"github.com/bketelsen/inventory/web"
+	"github.com/bketelsen/toolbox/cobra"
 	"github.com/coreos/go-systemd/v22/daemon"
-	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
@@ -42,14 +44,17 @@ var serveCmd = &cobra.Command{
 	Short: "Serve starts the RPC and HTTP servers",
 
 	RunE: func(cmd *cobra.Command, args []string) error {
+		slog.SetDefault(cmd.Logger)
+
 		cfg, err := types.ReadConfig()
 		if err != nil {
 			log.Println("Error reading config:", err)
 			return err
 		}
-		log.Println("Starting inventory server")
-		log.Printf("HTTP Port: %d", cfg.HTTPPort)
-		log.Printf("RPC Port: %d", cfg.RPCPort)
+		cmd.Logger.Info("Starting inventory server", "httpport", cfg.HTTPPort, "rpcport", cfg.RPCPort)
+
+		// set up logging since this is a long running process
+
 		// Create a new memory storage
 		memStorage := storage.NewMemoryStorage(cfg)
 
@@ -62,7 +67,7 @@ var serveCmd = &cobra.Command{
 			log.Fatal(e)
 		}
 		if !sent {
-			log.Printf("SystemD notify NOT sent\n")
+			cmd.Logger.Warn("SystemD notify NOT sent")
 		}
 
 		listener, err := net.Listen("tcp", ":9999")
@@ -72,7 +77,7 @@ var serveCmd = &cobra.Command{
 		}
 		defer listener.Close()
 
-		log.Println("RPC Server is listening on port 9999...")
+		cmd.Logger.Info("RPC Server is listening on port 9999...")
 		go func() {
 			rpc.Accept(listener) // Accept incoming RPC connections
 		}()
@@ -82,9 +87,10 @@ var serveCmd = &cobra.Command{
 		http.Handle("/static/", http.FileServer(http.FS(web.Static)))
 
 		http.Handle("/", web.NewInventoryHandler(memStorage))
-		log.Println("http server listening on :8000")
+		cmd.Logger.Info("http server listening on :8000")
 		if err := http.ListenAndServe("0.0.0.0:8000", nil); err != nil {
-			log.Printf("error listening: %v", err)
+			cmd.Logger.Error(fmt.Sprintf("error listening: %v", err))
+			return err
 		}
 		return nil
 	},

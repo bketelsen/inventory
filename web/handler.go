@@ -2,7 +2,7 @@ package web
 
 import (
 	"embed"
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/a-h/templ"
@@ -22,22 +22,25 @@ func NewInventoryHandler(storage storage.Storage) InventoryHandler {
 	}
 	return InventoryHandler{
 		GetReports: reportsGetter,
-		Log:        log.Default(),
 	}
 }
 
 type InventoryHandler struct {
-	Log        *log.Logger
 	GetReports func() ([]types.Report, error)
 }
 
 func (ph InventoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	ps, err := ph.GetReports()
+	if err != nil {
+		slog.Error("failed to get reports", "error", err)
+		http.Error(w, "failed to retrieve reports", http.StatusInternalServerError)
+		return
+	}
 	// check the host query string
 	host := r.URL.Query().Get("host")
 	if host != "" {
-		ph.Log.Printf("Filtering reports by host: %s", host)
+		slog.Info("Filtering reports", "host", host)
 		// filter the reports by host
 		var filteredReports []types.Report
 		for _, report := range ps {
@@ -49,7 +52,7 @@ func (ph InventoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	container := r.URL.Query().Get("container")
 	if container != "" {
-		ph.Log.Printf("Filtering reports by container: %s", container)
+		slog.Info("Filtering reports", "container", container)
 		var filteredReports []types.Report
 
 		// filter the reports by container
@@ -66,10 +69,6 @@ func (ph InventoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		ps = filteredReports
 
 	}
-	if err != nil {
-		ph.Log.Printf("failed to get reports: %v", err)
-		http.Error(w, "failed to retrieve reports", http.StatusInternalServerError)
-		return
-	}
+
 	templ.Handler(reports(ps)).ServeHTTP(w, r)
 }
