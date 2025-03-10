@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"net"
 	"net/rpc"
 	"os"
@@ -29,11 +30,10 @@ func NewClient(config types.Config) *Client {
 }
 func (r *Client) Send() error {
 
-	log.Println("Verbose mode:", r.config.Verbose)
-	log.Println("Server address:", r.config.Server.Address)
+	slog.Info("starting inventory client", "address", r.config.Server.Address, "verbose", r.config.Verbose)
 	cl, err := rpc.Dial("tcp", r.config.Server.Address) // Connect to server using config
 	if err != nil {
-		log.Printf("Error connecting to %s: %v", r.config.Server.Address, err)
+		slog.Error("Error connecting to server", "address", r.config.Server.Address, "error", err)
 		return err
 	}
 	defer cl.Close()
@@ -42,7 +42,8 @@ func (r *Client) Send() error {
 	report := types.Report{}
 	host, err := GetHost()
 	if err != nil {
-		log.Println("Error getting host:", err)
+		slog.Error("Error getting host", "error", err)
+
 		return err
 	}
 	report.Host = host
@@ -54,17 +55,20 @@ func (r *Client) Send() error {
 	}
 	report.Listeners, err = GetListeners()
 	if err != nil {
-		log.Println("Error getting listeners:", err)
+		slog.Error("Error getting listeners", "error", err)
+
 		return err
 	}
 	dockerContainers, err := GetDockerContainers(host.IP)
 	if err != nil {
-		log.Println("Error getting docker containers:", err)
+		slog.Error("Error getting docker containers:", "error", err)
+
 		return err
 	}
 	incusContainers, err := GetIncusContainers()
 	if err != nil {
-		log.Println("Error getting incus containers:", err)
+		slog.Error("Error getting incus containers:", "error", err)
+
 		return err
 	}
 	report.Containers = append(report.Containers, dockerContainers...)
@@ -76,11 +80,11 @@ func (r *Client) Send() error {
 	// Call Update method on the server
 	err = cl.Call("InventoryServer.Update", report, &result)
 	if err != nil {
-		log.Println("Error calling InventoryServer.Update:", err)
+		slog.Error("Error calling InventoryServer.Update", "error", err)
+
 		return err
 	}
-
-	log.Println("server response:", result)
+	slog.Info("Inventory report sent successfully", "result", result)
 	return nil
 
 }
@@ -89,7 +93,7 @@ func (r *Client) Search(query string) ([]types.Report, error) {
 
 	cl, err := rpc.Dial("tcp", r.config.Server.Address) // Connect to server using config
 	if err != nil {
-		log.Printf("Error connecting to %s: %v", r.config.Server.Address, err)
+		slog.Error("Error connecting to server", "address", r.config.Server.Address, "error", err)
 		return []types.Report{}, err
 	}
 	defer cl.Close()
@@ -98,7 +102,7 @@ func (r *Client) Search(query string) ([]types.Report, error) {
 	// Call Search method on the server
 	err = cl.Call("InventoryServer.Search", query, &result)
 	if err != nil {
-		log.Println("Error calling InventoryServer.Search:", err)
+		slog.Error("Error calling InventoryServer.Search", "error", err)
 		return []types.Report{}, err
 	}
 
@@ -107,28 +111,28 @@ func (r *Client) Search(query string) ([]types.Report, error) {
 }
 
 func GetHost() (types.Host, error) {
-	log.Println("Getting host information")
+	slog.Info("Getting host information")
 	h := types.Host{}
 	hostname, err := os.Hostname()
 	if err != nil {
-		log.Printf("Error getting hostname: %v", err)
+		slog.Error("Error getting hostname", "error", err)
 		return h, err
 	}
 	h.HostName = hostname
 
 	ip, err := gateway.DiscoverInterface()
 	if err != nil {
-		log.Printf("Error getting IP address: %v", err)
+		slog.Error("Error discovering IP address", "error", err)
 		return h, err
 	}
 	h.IP = ip.String()
 
-	log.Printf("Host: %s, IP: %s", h.HostName, h.IP)
+	slog.Info("Host information", "hostname", h.HostName, "IP", h.IP)
 	return h, nil
 }
 
 func GetListeners() ([]types.Listener, error) {
-	log.Println("Getting network listeners")
+	slog.Info("Getting network listeners")
 
 	l := []types.Listener{}
 	// get tcp sockets
@@ -136,7 +140,7 @@ func GetListeners() ([]types.Listener, error) {
 		return s.State == netstat.Listen
 	})
 	if err != nil {
-		log.Printf("Error getting IPv4 TCP sockets: %v", err)
+		slog.Error("Error getting TCP4 sockets", "error", err)
 		return l, err
 	}
 	for _, tab := range tabs {
@@ -159,7 +163,7 @@ func GetListeners() ([]types.Listener, error) {
 		return s.State == netstat.Listen
 	})
 	if err != nil {
-		log.Printf("Error getting IPv6 TCP sockets: %v", err)
+		slog.Error("Error getting TCP6 sockets", "error", err)
 
 		return l, err
 	}
@@ -185,7 +189,7 @@ func GetDockerContainers(defaultIP string) ([]types.Container, error) {
 	containers := []types.Container{}
 	apiClient, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	if err != nil {
-		log.Printf("Error creating Docker client: %v", err)
+		slog.Error("Error creating Docker client", "error", err)
 		return containers, err
 
 	}
@@ -194,10 +198,10 @@ func GetDockerContainers(defaultIP string) ([]types.Container, error) {
 	cc, err := apiClient.ContainerList(context.Background(), container.ListOptions{All: false})
 	if err != nil {
 		if strings.Contains(err.Error(), "Cannot connect to the Docker daemon") {
-			log.Printf("Docker not running, or can't connect")
+			slog.Error("Docker not running, or can't connect", "error", err)
 			return containers, nil
 		} else {
-			log.Printf("Docker error: %v", err)
+			slog.Error("Error listing Docker containers", "error", err)
 
 			return containers, err
 		}
@@ -214,7 +218,7 @@ func GetDockerContainers(defaultIP string) ([]types.Container, error) {
 			if port.IP == "0.0.0.0" {
 				port.IP = defaultIP
 			}
-			log.Printf("Found published port: %s:%d/%s\n", port.IP, port.PublicPort, port.Type)
+			slog.Info("Found published port", "ip", port.IP, "publicPort", port.PublicPort, "type", port.Type)
 			ports = append(ports, fmt.Sprintf("%s:%d/%s", port.IP, port.PublicPort, port.Type))
 		}
 
@@ -236,21 +240,21 @@ func GetIncusContainers() ([]types.Container, error) {
 	client, err := inclient.NewClient(cfg)
 	if err != nil {
 		if strings.Contains(err.Error(), "appear to be started") {
-			log.Println("No incus server running, or can't connect")
+			slog.Error("No incus server running, or can't connect", "error", err)
 			return containers, nil
 		} else {
-			log.Printf("Error creating Incus client: %v", err)
+			slog.Error("Error creating Incus client", "error", err)
 			return containers, err
 		}
 	}
 	cc, err := client.Instances(context.Background())
 	if err != nil {
 		if strings.Contains(err.Error(), "appear to be started") {
-			log.Println("No incus server running, or can't connect")
+			slog.Error("No incus server running, or can't connect", "error", err)
 
 			return containers, nil
 		} else {
-			log.Printf("Error listing Incus instances: %v", err)
+			slog.Error("Error listing Incus instances", "error", err)
 
 			return nil, err
 		}
@@ -260,10 +264,10 @@ func GetIncusContainers() ([]types.Container, error) {
 			continue
 		}
 		if c.Status == "Error" {
-			log.Println("incus container in error state:", c.Name)
+			slog.Error("Incus container in error state", "name", c.Name)
 			continue
 		}
-		log.Println("Found Incus container:", c.Name)
+		slog.Info("Found Incus container", "name", c.Name, "status", c.Status)
 		containers = append(containers, types.Container{
 			ContainerID: c.Name,
 			HostName:    c.Name,
