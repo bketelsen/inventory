@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/bketelsen/toolbox/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/bketelsen/toolbox/cobra/doc"
 )
@@ -23,16 +24,18 @@ var docsCmd = &cobra.Command{
 	Hidden: true,
 	Short:  "Generate documentation for the project",
 	Run: func(cmd *cobra.Command, args []string) {
+		bp := viper.GetString("basepath")
+		cmd.Logger.Info("Base path for documentation", "basepath", bp)
 		cmd.Logger.Info("Generating documentation...")
 		linkHandler := func(name string) string {
 			base := strings.TrimSuffix(name, path.Ext(name))
-			return "/docs/cli/" + strings.ToLower(base) + "/"
+			return bp + "/docs/cli/" + strings.ToLower(base) + "/"
 		}
 		filePrepender := func(filename string) string {
 			now := time.Now().Format(time.RFC3339)
 			name := filepath.Base(filename)
 			base := strings.TrimSuffix(name, path.Ext(name))
-			url := "/docs/cli/" + strings.ToLower(base) + "/"
+			url := bp + "/docs/cli/" + strings.ToLower(base) + "/"
 			return fmt.Sprintf(fmTemplate, now, strings.Replace(base, "_", " ", -1), base, url)
 		}
 
@@ -58,7 +61,8 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// docsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	docsCmd.Flags().StringP("basepath", "b", "", "Base path for the documentation (default is /)")
+	viper.BindPFlag("basepath", docsCmd.Flags().Lookup("basepath"))
 }
 
 const fmTemplate = `---
