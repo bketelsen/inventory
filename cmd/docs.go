@@ -35,7 +35,7 @@ var docsCmd = &cobra.Command{
 			now := time.Now().Format(time.RFC3339)
 			name := filepath.Base(filename)
 			base := strings.TrimSuffix(name, path.Ext(name))
-			url := bp + "/docs/cli/" + strings.ToLower(base) + "/"
+			url := "/docs/cli/" + strings.ToLower(base) + "/"
 			return fmt.Sprintf(fmTemplate, now, strings.Replace(base, "_", " ", -1), base, url)
 		}
 

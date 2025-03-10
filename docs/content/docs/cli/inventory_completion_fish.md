@@ -1,8 +1,8 @@
 ---
-date: 2025-03-10T18:17:58Z
+date: 2025-03-10T18:47:50Z
 title: "inventory completion fish"
 slug: inventory_completion_fish
-url: /inventory/docs/cli/inventory_completion_fish/
+url: /docs/cli/inventory_completion_fish/
 ---
 ## inventory completion fish
 

@@ -82,7 +82,7 @@ tasks:
   generate:
     deps: [tools]
     cmds:
-      - go run main.go docs
+      - go run main.go docs -b "/inventory"
     silent: true
   site:
     desc: Run hugo dev server
