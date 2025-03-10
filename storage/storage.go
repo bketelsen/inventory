@@ -1,8 +1,11 @@
 package storage
 
 import (
-	"log"
+	"slices"
+	"strings"
 	"sync"
+
+	"log/slog"
 
 	"github.com/bketelsen/inventory/types"
 )
@@ -23,7 +26,7 @@ type MemoryStorage struct {
 
 // NewMemoryStorage creates a new instance of MemoryStorage
 func NewMemoryStorage(config types.Config) *MemoryStorage {
-	log.Println("Creating new in-memory storage")
+	slog.Info("Creating new in-memory storage")
 	return &MemoryStorage{
 		config:  config,
 		reports: make(map[string]types.Report),
@@ -34,7 +37,7 @@ func NewMemoryStorage(config types.Config) *MemoryStorage {
 func (ms *MemoryStorage) StoreReport(report types.Report) error {
 	ms.mu.Lock()
 	defer ms.mu.Unlock()
-	log.Printf("[%s] Storing report", report.Host.HostName)
+	slog.Info("Storing report", "host", report.Host.HostName)
 	ms.reports[report.Host.HostName] = report
 	return nil
 }
@@ -43,7 +46,7 @@ func (ms *MemoryStorage) StoreReport(report types.Report) error {
 func (ms *MemoryStorage) GetReport(hostname string) (types.Report, bool) {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
-	log.Printf("Retrieving report for host %s", hostname)
+	slog.Info("Retrieving report", "host", hostname)
 	report, exists := ms.reports[hostname]
 	return report, exists
 }
@@ -52,10 +55,17 @@ func (ms *MemoryStorage) GetReport(hostname string) (types.Report, bool) {
 func (ms *MemoryStorage) GetAllReports() []types.Report {
 	ms.mu.RLock()
 	defer ms.mu.RUnlock()
-	log.Printf("Retrieving %d reports", len(ms.reports))
+	slog.Info("Retrieving reports", "count", len(ms.reports))
 	reports := make([]types.Report, 0, len(ms.reports))
 	for _, report := range ms.reports {
 		reports = append(reports, report)
 	}
+	// sort the reports by hostname
+	slices.SortFunc(reports, func(a, b types.Report) int {
+		if n := strings.Compare(a.Host.HostName, b.Host.HostName); n != 0 {
+			return n
+		}
+		return 0
+	})
 	return reports
 }

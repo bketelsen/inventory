@@ -6,11 +6,12 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"log/slog"
 
 	"github.com/bketelsen/inventory/client"
 	"github.com/bketelsen/inventory/types"
+	"github.com/bketelsen/toolbox/cobra"
 	"github.com/bketelsen/toolbox/ui"
-	"github.com/spf13/cobra"
 )
 
 // searchCmd represents the search command
@@ -25,6 +26,7 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 	Args:  cobra.ExactArgs(1),
 	Long:  `Search returns a list of services, listeners, and containers that match the query.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		slog.SetDefault(cmd.Logger)
 		// Read config
 		config, err := types.ReadConfig()
 		if err != nil {
@@ -33,6 +35,7 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 		}
 
 		// Get server address from config or use default
+
 		cl := client.NewClient(config)
 		result, err := cl.Search(args[0])
 		if err != nil {

@@ -27,15 +27,34 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spf13/cobra"
+	"github.com/bketelsen/toolbox/cobra"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
+var version string
+var commit string
+
+func versionString() string {
+	if len(commit) > 7 {
+		commit = commit[:7]
+	}
+	if len(commit) == 0 {
+		commit = "unknown"
+	}
+	if len(version) == 0 {
+		version = "unknown"
+	}
+	return fmt.Sprintf("%s (%s)", version, commit)
+}
+
+// ldflags
+// Default: '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser'.
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use: "inventory",
+	Use:     "inventory",
+	Version: versionString(),
 	Example: `//client
 inventory send
 inventory send --verbose // more verbose output
@@ -50,10 +69,6 @@ inventory server --verbose --config /path/to/config.yaml // specify a config fil
 to a central server. It collects information about the host,
 docker/incus containers, and manually specified services running on the host.
 The reporting command is designed to be run as a cron job or systemd timer.
-
-It is not intended to be run interactively.
-
-
 
 Inventory listens for http requests on port 8000 by default.
 Inventory listens for rpc requests on port 9000 by default.

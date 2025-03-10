@@ -23,11 +23,12 @@ package cmd
 
 import (
 	"log"
+	"log/slog"
 
 	"github.com/bketelsen/inventory/client"
 	"github.com/bketelsen/inventory/types"
 
-	"github.com/spf13/cobra"
+	"github.com/bketelsen/toolbox/cobra"
 )
 
 // sendCmd represents the send command
@@ -46,6 +47,7 @@ and sends it to the server. It is designed to be run as a cron job or systemd ti
 It is not intended to be run interactively.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		slog.SetDefault(cmd.Logger)
 		// Read config
 		config, err := types.ReadConfig()
 		if err != nil {
@@ -54,13 +56,14 @@ It is not intended to be run interactively.
 		}
 
 		// Get server address from config or use default
+
 		cl := client.NewClient(config)
 		err = cl.Send()
 		if err != nil {
 			log.Printf("Error sending report: %v", err)
 			return err
 		}
-		log.Println("Report sent successfully")
+		cmd.Logger.Info("Inventory sent successfully")
 		return nil
 	},
 }
