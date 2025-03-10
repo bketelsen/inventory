@@ -1,8 +1,8 @@
 ---
-date: 2025-03-10T18:17:58Z
+date: 2025-03-10T18:47:50Z
 title: "inventory completion zsh"
 slug: inventory_completion_zsh
-url: /inventory/docs/cli/inventory_completion_zsh/
+url: /docs/cli/inventory_completion_zsh/
 ---
 ## inventory completion zsh
 

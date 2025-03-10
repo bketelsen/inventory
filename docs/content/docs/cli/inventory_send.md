@@ -1,8 +1,8 @@
 ---
-date: 2025-03-10T18:17:58Z
+date: 2025-03-10T18:47:50Z
 title: "inventory send"
 slug: inventory_send
-url: /inventory/docs/cli/inventory_send/
+url: /docs/cli/inventory_send/
 ---
 ## inventory send
 

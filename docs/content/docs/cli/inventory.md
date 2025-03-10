@@ -1,8 +1,8 @@
 ---
-date: 2025-03-10T18:17:58Z
+date: 2025-03-10T18:47:50Z
 title: "inventory"
 slug: inventory
-url: /inventory/docs/cli/inventory/
+url: /docs/cli/inventory/
 ---
 ## inventory
 
