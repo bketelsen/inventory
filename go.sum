@@ -8,8 +8,8 @@ github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiE
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/bketelsen/inclient v0.0.5 h1:k5H/debfGznd7i2VSCzqpWjd5z5Igm0DQCDtowDXXOM=
 github.com/bketelsen/inclient v0.0.5/go.mod h1:0FTjkxQa3bWiplU90NBTEjGMoKdsfZBWLPtPoE+GaxI=
-github.com/bketelsen/toolbox v0.1.0 h1:Rd1bjhYWuRXJ0I/LDucJrfOa6z9kB7aSxs6bFitYsy4=
-github.com/bketelsen/toolbox v0.1.0/go.mod h1:ZJ4KN7Q9LEdi0Z5DbF24GZd+FqRtB7lKcQWflVCaeeo=
+github.com/bketelsen/toolbox v0.1.1 h1:A4ym3YUKnTyr7Z84HhfRL5isXLX9cbMjQaGF/YBZppA=
+github.com/bketelsen/toolbox v0.1.1/go.mod h1:ZJ4KN7Q9LEdi0Z5DbF24GZd+FqRtB7lKcQWflVCaeeo=
 github.com/bmatcuk/doublestar/v4 v4.8.0 h1:DSXtrypQddoug1459viM9X9D3dp1Z7993fw36I2kNcQ=
 github.com/bmatcuk/doublestar/v4 v4.8.0/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5 h1:BjkPE3785EwPhhyuFkbINB+2a1xATwk8SNDWnJiD41g=

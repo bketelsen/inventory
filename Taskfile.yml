@@ -3,7 +3,7 @@
 version: '3'
 
 vars:
-  VERSION: 0.2.1
+  VERSION: 0.2.2
 
 tasks:
   build:
@@ -15,19 +15,19 @@ tasks:
     cmds:
       - go test ./...
     silent: true
-  format: 
+  format:
     cmds:
       - gofmt -w -s .
     silent: true
-  vet: 
+  vet:
     cmds:
       - go vet ./...
     silent: true
-  staticcheck: 
+  staticcheck:
     cmds:
       - staticcheck ./...
     silent: true
-  tidy: 
+  tidy:
     cmds:
       - go mod tidy
     silent: true
@@ -54,7 +54,7 @@ tasks:
 
   install:
     cmds:
-      - echo "Installing server locally"  
+      - echo "Installing server locally"
       - sudo cp ./inventory /usr/local/bin/inventory
   snapshot:
     cmds:
@@ -76,8 +76,8 @@ tasks:
   goreleaser:
     cmds:
       - wget https://github.com/goreleaser/goreleaser-pro/releases/download/v2.7.0-pro/goreleaser-pro_2.7.0_amd64.deb
-      - sudo dpkg -i goreleaser-pro_2.7.0_amd64.deb 
-      - rm goreleaser-pro_2.7.0_amd64.deb 
+      - sudo dpkg -i goreleaser-pro_2.7.0_amd64.deb
+      - rm goreleaser-pro_2.7.0_amd64.deb
     silent: true
   generate:
     deps: [tools]
