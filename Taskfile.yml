@@ -82,6 +82,8 @@ tasks:
   generate:
     deps: [tools]
     cmds:
+      - starter installer -o -r https://github.com/bketelsen/inventory
+      - cp install.sh ./docs/static/install.sh
       - go run main.go docs -b "/inventory"
     silent: true
   site:
