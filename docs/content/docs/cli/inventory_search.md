@@ -1,5 +1,5 @@
 ---
-date: 2025-03-12T15:28:17Z
+date: 2025-03-12T15:35:37Z
 title: "inventory search"
 slug: inventory_search
 url: /docs/cli/inventory_search/

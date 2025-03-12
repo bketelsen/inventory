@@ -39,14 +39,18 @@ module:
 
 menu:
   main:
+    - identifier: install
+      name: Installation
+      pageRef: /docs/installation
+      weight: 1
     - identifier: documentation
       name: Documentation
       pageRef: /docs
-      weight: 1
+      weight: 2
     - identifier: guides
       name: Guides
       pageRef: /docs/guides
-      weight: 2
+      weight: 3
     - name: Search
       weight: 5
       params:
