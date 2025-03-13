@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -13,20 +10,23 @@ import (
 	"time"
 
 	"github.com/bketelsen/toolbox/cobra"
-	"github.com/spf13/viper"
-
 	"github.com/bketelsen/toolbox/cobra/doc"
+	"github.com/spf13/viper"
 )
 
-// docsCmd represents the docs command
-var docsCmd = &cobra.Command{
-	Use:    "docs",
-	Hidden: true,
-	Short:  "Generate documentation for the project",
+// gendocsCmd represents the gendocs command
+var gendocsCmd = &cobra.Command{
+	Use:   "gendocs",
+	Short: "Generates documentation for the project",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		bp := viper.GetString("basepath")
 		cmd.Logger.Info("Base path for documentation", "basepath", bp)
-		cmd.Logger.Info("Generating documentation...")
 		linkHandler := func(name string) string {
 			base := strings.TrimSuffix(name, path.Ext(name))
 			return bp + "/docs/cli/" + strings.ToLower(base) + "/"
@@ -38,7 +38,6 @@ var docsCmd = &cobra.Command{
 			url := "/docs/cli/" + strings.ToLower(base) + "/"
 			return fmt.Sprintf(fmTemplate, now, strings.Replace(base, "_", " ", -1), base, url)
 		}
-
 		err := os.MkdirAll("./docs/content/docs/cli/", 0755)
 		if err != nil {
 			log.Fatal(err)
@@ -51,18 +50,19 @@ var docsCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(docsCmd)
+	rootCmd.AddCommand(gendocsCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// docsCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// gendocsCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	docsCmd.Flags().StringP("basepath", "b", "", "Base path for the documentation (default is /)")
-	viper.BindPFlag("basepath", docsCmd.Flags().Lookup("basepath"))
+	// gendocsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	gendocsCmd.Flags().StringP("basepath", "b", "/inventory", "Base path for the documentation (default is /everything)")
+	viper.BindPFlag("basepath", gendocsCmd.Flags().Lookup("basepath"))
 }
 
 const fmTemplate = `---

@@ -1,0 +1,19 @@
+actions-go: true
+actions-pages: true
+actions-release: true
+author: Brian Ketelsen
+basepath: /inventory
+devcontainer: true
+docs: true
+email: bketelsen@gmail.com
+extras: true
+full-name: Brian Ketelsen
+installer: true
+license: MIT
+owner: bketelsen
+releaser: true
+repo: inventory
+repository: https://github.com/bketelsen/inventory
+taskfile: true
+useviper: true
+verbose: false
