@@ -1,94 +1,53 @@
 # https://taskfile.dev
+# Generated File, changes may be lost
+# Add `Taskfile.custom.yml` in this directory with your additions
 
 version: '3'
 
 vars:
-  VERSION: 0.2.2
+  VERSION: 0.2.3
+
+includes:
+  docs:
+    taskfile: ./docs/Taskfile.yml
+    optional: true
+    dir: ./docs
+  checks:
+    taskfile: Taskfile.checks.yml
+    optional: true
+  release:
+    taskfile: Taskfile.release.yml
+    optional: true
+  custom:
+    taskfile: Taskfile.custom.yml
+    optional: true
 
 tasks:
   build:
+    desc: Build the application
+    summary: |
+      Build the application with ldflags to set the version with a -dev suffix.
+
+      Output: 'inventory' in project root.
     cmds:
-      - templ generate
-      - go build -o inventory-cli -ldflags '-s -w -X github.com/bketelsen/inventory/cmd.version={{.VERSION}}-dev' main.go
+      - go build -o inventory -ldflags '-s -w -X github.com/bketelsen/inventory/cmd.version={{.VERSION}}-dev' main.go
     silent: true
-  test:
-    cmds:
-      - go test ./...
-    silent: true
-  format:
-    cmds:
-      - gofmt -w -s .
-    silent: true
-  vet:
-    cmds:
-      - go vet ./...
-    silent: true
-  staticcheck:
-    cmds:
-      - staticcheck ./...
-    silent: true
-  tidy:
-    cmds:
-      - go mod tidy
-    silent: true
-  checks:
-    cmds:
-      - task staticcheck
-      - task vet
-      - task test
-      - task format
-      - task tidy
-    silent: true
-  serve:
-    cmds:
-      - go run main.go serve
-    silent: true
-  send:
-    cmds:
-      - go run main.go send
-    silent: true
+
   tools:
+    desc: Install required tools
     cmds:
-      - go install github.com/a-h/templ/cmd/templ@latest
       - go install github.com/bketelsen/toolbox/starter@latest
 
-  install:
-    cmds:
-      - echo "Installing server locally"
-      - sudo cp ./inventory /usr/local/bin/inventory
-  snapshot:
-    cmds:
-      - goreleaser release --snapshot --clean
-    silent: true
-  release-check:
-    cmds:
-      - goreleaser check
-    silent: true
-  publish:
-    cmds:
-      - git push origin
-      - git tag v{{.VERSION}}
-      - git push --tags
   direnv:
+    desc: Add direnv hook to your bashrc
     cmds:
       - direnv hook bash >> ~/.bashrc
     silent: true
-  goreleaser:
-    cmds:
-      - wget https://github.com/goreleaser/goreleaser-pro/releases/download/v2.7.0-pro/goreleaser-pro_2.7.0_amd64.deb
-      - sudo dpkg -i goreleaser-pro_2.7.0_amd64.deb
-      - rm goreleaser-pro_2.7.0_amd64.deb
-    silent: true
+
   generate:
+    desc: Generate CLI documentation
     deps: [tools]
     cmds:
-      - starter installer -o -r https://github.com/bketelsen/inventory
-      - cp install.sh ./docs/static/install.sh
-      - go run main.go docs -b "/inventory"
+      - go run main.go gendocs -b "/inventory"
     silent: true
-  site:
-    desc: Run hugo dev server
-    deps: [build, generate]
-    dir: docs
-    cmds:
-      - hugo server --buildDrafts --disableFastRender
+

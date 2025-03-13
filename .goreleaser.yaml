@@ -11,7 +11,7 @@ before:
     - templ generate
 after:
   hooks:
-    - go run main.go docs
+    - go run main.go gendocs -b "/inventory"
 builds:
   - env:
       - CGO_ENABLED=0
@@ -61,7 +61,7 @@ announce:
     # Whether it's enabled or not.
     #
     # Templates: allowed (since v2.6).
-    enabled: true
+    enabled: false
 
     # Message template to use while publishing.
     #
