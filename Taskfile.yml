@@ -37,6 +37,7 @@ tasks:
     desc: Install required tools
     cmds:
       - go install github.com/bketelsen/toolbox/starter@latest
+      - go install github.com/a-h/templ/cmd/templ@latest
 
   direnv:
     desc: Add direnv hook to your bashrc
