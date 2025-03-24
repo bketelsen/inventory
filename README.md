@@ -12,7 +12,7 @@ Example systemd unit files are in the `/contrib` folder, along with example cron
 
 ## Configuration
 
-`inventory` searches `/etc/inventory/` and `$HOME/.inventory` for a yaml formatted file named `inventory` with configuration values.
+`inventory` searches `/etc/inventory/`, `$HOME/.config/inventory/` and `$HOME/.inventory/`(deprecated) for a yaml formatted file named `inventory.yaml` with configuration values.
 
 Currently, you can set log level to verbose, and specify the server where reports are sent.
 
