@@ -8,7 +8,7 @@ require (
 	github.com/bketelsen/toolbox v0.4.2
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
 	github.com/coreos/go-systemd/v22 v22.5.0
-	github.com/docker/docker v28.0.1+incompatible
+	github.com/docker/docker v28.0.2+incompatible
 	github.com/jackpal/gateway v1.0.16
 	github.com/lxc/incus/v6 v6.10.1
 	github.com/spf13/viper v1.20.0
