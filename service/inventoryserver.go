@@ -13,14 +13,12 @@ import (
 // Define a struct. This struct will bind all the RPC methods
 type InventoryServer struct {
 	storage storage.Storage
-	config  types.Config
 }
 
 // NewInventoryServer creates a new server with the provided storage
-func NewInventoryServer(config types.Config, storage storage.Storage) *InventoryServer {
+func NewInventoryServer(storage storage.Storage) *InventoryServer {
 	return &InventoryServer{
 		storage: storage,
-		config:  config,
 	}
 }
 

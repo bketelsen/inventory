@@ -28,7 +28,7 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		slog.SetDefault(cmd.Logger)
 		// Read config
-		config, err := types.ReadConfig()
+		config, err := types.ViperToStruct(cmd.GlobalConfig())
 		if err != nil {
 			log.Println("Error reading config:", err)
 			return err

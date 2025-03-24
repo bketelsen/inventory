@@ -27,7 +27,6 @@ import (
 
 	"github.com/bketelsen/inventory/client"
 	"github.com/bketelsen/inventory/types"
-
 	"github.com/bketelsen/toolbox/cobra"
 )
 
@@ -48,8 +47,9 @@ It is not intended to be run interactively.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		slog.SetDefault(cmd.Logger)
+		cmd.Logger.Info(cmd.GlobalConfig().GetString("description"))
 		// Read config
-		config, err := types.ReadConfig()
+		config, err := types.ViperToStruct(cmd.GlobalConfig())
 		if err != nil {
 			log.Println("Error reading config:", err)
 			return err
@@ -64,6 +64,7 @@ It is not intended to be run interactively.
 			return err
 		}
 		cmd.Logger.Info("Inventory sent successfully")
+
 		return nil
 	},
 }

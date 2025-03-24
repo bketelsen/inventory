@@ -5,3 +5,7 @@ dist/
 docs/public
 docs/.hugo_build.lock
 /bin
+/inventory
+.hugo_build.lock
+/public
+/dist

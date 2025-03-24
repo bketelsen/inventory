@@ -22,31 +22,26 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"strings"
 
 	"github.com/bketelsen/toolbox/cobra"
+	goversion "github.com/bketelsen/toolbox/go-version"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
-var version string
-var commit string
+var appname = "inventory"
+var (
+	version   = ""
+	commit    = ""
+	treeState = ""
+	date      = ""
+	builtBy   = ""
+)
 
-func versionString() string {
-	if len(commit) > 7 {
-		commit = commit[:7]
-	}
-	if len(commit) == 0 {
-		commit = "unknown"
-	}
-	if len(version) == 0 {
-		version = "unknown"
-	}
-	return fmt.Sprintf("%s (%s)", version, commit)
-}
+var bversion = buildVersion(version, commit, date, builtBy, treeState)
 
 // ldflags
 // Default: '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser'.
@@ -54,7 +49,34 @@ func versionString() string {
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "inventory",
-	Version: versionString(),
+	Version: bversion.String(),
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// set the slog default logger to the cobra logger
+		slog.SetDefault(cmd.Logger)
+		// set log level based on the --verbose flag
+		if cmd.GlobalConfig().GetBool("verbose") {
+			cmd.SetLogLevel(slog.LevelDebug)
+			cmd.Logger.Debug("Debug logging enabled")
+		}
+	},
+	InitConfig: func() *viper.Viper {
+		config := viper.New()
+		config.SetEnvPrefix(appname)
+		config.AutomaticEnv()
+		config.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", ""))
+		config.SetConfigType("yaml")
+		config.SetConfigFile(cfgFile)
+		config.SetConfigName("inventory.yaml")   // name of config file
+		config.AddConfigPath("/etc/inventory/")  // path to look for the config file in
+		config.AddConfigPath("$HOME/.inventory") // call multiple times to add many search paths
+		config.AddConfigPath(".")                // optionally look for config in the working directory
+		if err := config.ReadInConfig(); err == nil {
+			slog.Info("Using config file:", slog.String("file", config.ConfigFileUsed()))
+		} else {
+			slog.Info("No config file found, using defaults")
+		}
+		return config
+	},
 	Example: `//client
 inventory send
 inventory send --verbose // more verbose output
@@ -89,7 +111,6 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -100,35 +121,43 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "verbose logging")
-	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+
 }
 
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
+// https://www.asciiart.eu/text-to-ascii-art to make your own
+// just make sure the font doesn't have backticks in the letters or
+// it will break the string quoting
+var asciiName = `
+██╗███╗   ██╗██╗   ██╗███████╗███╗   ██╗████████╗ ██████╗ ██████╗ ██╗   ██╗
+██║████╗  ██║██║   ██║██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+██║██╔██╗ ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝ ╚████╔╝ 
+██║██║╚██╗██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝  
+██║██║ ╚████║ ╚████╔╝ ███████╗██║ ╚████║   ██║   ╚██████╔╝██║  ██║   ██║   
+╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+`
 
-		viper.SetConfigName("inventory")        // name of config file (without extension)
-		viper.SetConfigType("yaml")             // REQUIRED if the config file does not have the extension in the name
-		viper.AddConfigPath("/etc/inventory/")  // path to look for the config file in
-		viper.AddConfigPath("$HOME/.inventory") // call multiple times to add many search paths
-		viper.AddConfigPath(".")                // optionally look for config in the working directory
-		err := viper.ReadInConfig()             // Find and read the config file
-		if err != nil {                         // Handle errors reading the config file
-			if strings.Contains(err.Error(), "control characters") {
-				log.Println("No config file found, using defaults")
-			} else {
-				log.Println(fmt.Errorf("fatal error config file: %w", err))
-
+// buildVersion builds the version info for the application
+func buildVersion(version, commit, date, builtBy, treeState string) goversion.Info {
+	return goversion.GetVersionInfo(
+		goversion.WithAppDetails(appname, "Collect and report deployment information.", "https://github.com/bketelsen/inventory"),
+		goversion.WithASCIIName(asciiName),
+		func(i *goversion.Info) {
+			if commit != "" {
+				i.GitCommit = commit
 			}
-		} else {
-			if viper.GetBool("verbose") {
-				log.Println("Using config file:", viper.ConfigFileUsed())
+			if treeState != "" {
+				i.GitTreeState = treeState
 			}
-		}
-	}
-	viper.AutomaticEnv() // read in environment variables that match
+			if date != "" {
+				i.BuildDate = date
+			}
+			if version != "" {
+				i.GitVersion = version
+			}
+			if builtBy != "" {
+				i.BuiltBy = builtBy
+			}
 
+		},
+	)
 }

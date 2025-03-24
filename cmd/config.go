@@ -33,7 +33,7 @@ var configCmd = &cobra.Command{
 	Short: "Create an example configuration file for the inventory client (reporter)",
 	Long: `Create an example configuration file for the inventory client (reporter).
 
-This will create a file named inventory.config.yaml in the current directory.
+This will create a file named inventory.example.yaml in the current directory.
 The file will contain the following sections:
 - server.address 	
 	* the IP:port of the inventory server
@@ -50,12 +50,12 @@ the following locations:
 - /etc/inventory/
 - ~/.inventory/
 
-The file must be named "inventory" with no extension.
+The file must be named "inventory.yaml".
 
 Example:
 inventory config
 sudo mkdir -p /etc/inventory
-sudo mv inventory.config.yaml /etc/inventory/inventory
+sudo mv inventory.example.yaml /etc/inventory/inventory.yaml
 
 Be sure to edit the file to set your actual server address and location.
 The server.address is the IP:port of the inventory server.`,
@@ -70,17 +70,17 @@ The server.address is the IP:port of the inventory server.`,
 		v.Set("location", "Office Rack, Shelf 1")
 		v.Set("description", "2U AMD Ryzen 9 5950X")
 		v.Set("verbose", false)
-		v.WriteConfigAs("inventory.config.yaml")
+		v.WriteConfigAs("inventory.example.yaml")
 
 		cmd.Println(ui.Info("Sample config file created:",
-			"./inventory.config.yaml",
-			"Move the file to /etc/inventory/inventory or ~/.inventory/inventory",
-			"-- be sure to remove the .config.yaml extension --",
+			"./inventory.example.yaml",
+			"Move the file to /etc/inventory/inventory.yaml or ~/.inventory/inventory.yaml",
+			"-- be sure to remove the .example part of the filename extension --",
 			"to use it automatically"))
 		cmd.Println(ui.Info("Example:",
 			ui.Code("`inventory config`"),
 			ui.Code("`sudo mkdir -p /etc/inventory`"),
-			ui.Code("`sudo mv inventory.config.yaml /etc/inventory/inventory`")))
+			ui.Code("`sudo mv inventory.example.yaml /etc/inventory/inventory`")))
 		cmd.Println(ui.Info("Edit the file to set your actual server address and location."))
 	},
 }

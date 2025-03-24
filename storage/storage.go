@@ -21,14 +21,12 @@ type Storage interface {
 type MemoryStorage struct {
 	mu      sync.RWMutex
 	reports map[string]types.Report
-	config  types.Config
 }
 
 // NewMemoryStorage creates a new instance of MemoryStorage
-func NewMemoryStorage(config types.Config) *MemoryStorage {
+func NewMemoryStorage() *MemoryStorage {
 	slog.Info("Creating new in-memory storage")
 	return &MemoryStorage{
-		config:  config,
 		reports: make(map[string]types.Report),
 	}
 }
