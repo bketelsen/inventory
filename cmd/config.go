@@ -80,7 +80,7 @@ The server.address is the IP:port of the inventory server.`,
 		cmd.Println(ui.Info("Example:",
 			ui.Code("`inventory config`"),
 			ui.Code("`sudo mkdir -p /etc/inventory`"),
-			ui.Code("`sudo mv inventory.example.yaml /etc/inventory/inventory`")))
+			ui.Code("`sudo mv inventory.example.yaml /etc/inventory/inventory.yaml`")))
 		cmd.Println(ui.Info("Edit the file to set your actual server address and location."))
 	},
 }

@@ -66,10 +66,11 @@ var rootCmd = &cobra.Command{
 		config.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", ""))
 		config.SetConfigType("yaml")
 		config.SetConfigFile(cfgFile)
-		config.SetConfigName("inventory.yaml")   // name of config file
-		config.AddConfigPath("/etc/inventory/")  // path to look for the config file in
-		config.AddConfigPath("$HOME/.inventory") // call multiple times to add many search paths
-		config.AddConfigPath(".")                // optionally look for config in the working directory
+		config.SetConfigName("inventory.yaml")          // name of config file
+		config.AddConfigPath("/etc/inventory/")         // path to look for the config file in
+		config.AddConfigPath("$HOME/.config/inventory") // call multiple times to add many search paths
+		config.AddConfigPath("$HOME/.inventory")        // deprecate this in the future, keep home clean
+		config.AddConfigPath(".")                       // optionally look for config in the working directory
 		if err := config.ReadInConfig(); err == nil {
 			slog.Info("Using config file:", slog.String("file", config.ConfigFileUsed()))
 		} else {
@@ -116,7 +117,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/inventory/inventory)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/inventory/inventory.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -139,7 +140,7 @@ var asciiName = `
 // buildVersion builds the version info for the application
 func buildVersion(version, commit, date, builtBy, treeState string) goversion.Info {
 	return goversion.GetVersionInfo(
-		goversion.WithAppDetails(appname, "Collect and report deployment information.", "https://github.com/bketelsen/inventory"),
+		goversion.WithAppDetails(appname, "Collect and report deployment information.", "https://bketelsen.github.io/inventory"),
 		goversion.WithASCIIName(asciiName),
 		func(i *goversion.Info) {
 			if commit != "" {
