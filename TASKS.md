@@ -1,4 +1,3 @@
-
 ## Available Tasks
 
 ### build
@@ -92,6 +91,15 @@ Description: Run go vet on sources
 Run this task:
 ```
 task checks:vet
+```
+
+### docs:installer
+
+Description: Copy installer from root to site/static directory
+
+Run this task:
+```
+task docs:installer
 ```
 
 ### docs:site

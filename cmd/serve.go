@@ -35,7 +35,6 @@ import (
 	"github.com/bketelsen/inventory/web"
 	"github.com/bketelsen/toolbox/cobra"
 	"github.com/coreos/go-systemd/v22/daemon"
-	"github.com/spf13/viper"
 )
 
 // serveCmd represents the serve command
@@ -46,7 +45,7 @@ var serveCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		slog.SetDefault(cmd.Logger)
 
-		cfg, err := types.ReadConfig()
+		cfg, err := types.ViperToStruct(cmd.GlobalConfig())
 		if err != nil {
 			log.Println("Error reading config:", err)
 			return err
@@ -56,10 +55,10 @@ var serveCmd = &cobra.Command{
 		// set up logging since this is a long running process
 
 		// Create a new memory storage
-		memStorage := storage.NewMemoryStorage(cfg)
+		memStorage := storage.NewMemoryStorage()
 
 		// Create a new inventory server with the storage
-		server := service.NewInventoryServer(cfg, memStorage)
+		server := service.NewInventoryServer(memStorage)
 		rpc.Register(server) // Register the Inventory service
 
 		sent, e := daemon.SdNotify(false, "READY=1")
@@ -70,25 +69,28 @@ var serveCmd = &cobra.Command{
 			cmd.Logger.Warn("SystemD notify NOT sent")
 		}
 
-		listener, err := net.Listen("tcp", ":9999")
+		rpcPort := cmd.Config().GetInt("rpc-port")
+		rpcStr := fmt.Sprintf(":%d", rpcPort)
+		listener, err := net.Listen("tcp", rpcStr)
 		if err != nil {
 			log.Printf("Error listening: %v", err)
 			return err
 		}
 		defer listener.Close()
 
-		cmd.Logger.Info("RPC Server is listening on port 9999...")
+		cmd.Logger.Info("RPC Server is listening", "port", rpcPort)
 		go func() {
 			rpc.Accept(listener) // Accept incoming RPC connections
 		}()
-		// Use a template that doesn't take parameters.
-		//	http.Handle("/", templ.Handler(home()))
 
 		http.Handle("/static/", http.FileServer(http.FS(web.Static)))
 
 		http.Handle("/", web.NewInventoryHandler(memStorage))
-		cmd.Logger.Info("http server listening on :8000")
-		if err := http.ListenAndServe("0.0.0.0:8000", nil); err != nil {
+
+		httpPort := cmd.Config().GetInt("http-port")
+		httpStr := fmt.Sprintf("0.0.0.0:%d", httpPort)
+		cmd.Logger.Info("http server listening", "port", httpPort)
+		if err := http.ListenAndServe(httpStr, nil); err != nil {
 			cmd.Logger.Error(fmt.Sprintf("error listening: %v", err))
 			return err
 		}
@@ -99,17 +101,7 @@ var serveCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(serveCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
 	serveCmd.PersistentFlags().IntP("http-port", "w", 8000, "HTTP port")
-	viper.BindPFlag("http_port", serveCmd.PersistentFlags().Lookup("http-port"))
 	serveCmd.PersistentFlags().IntP("rpc-port", "r", 9999, "RPC port")
-	viper.BindPFlag("rpc_port", serveCmd.PersistentFlags().Lookup("rpc-port"))
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

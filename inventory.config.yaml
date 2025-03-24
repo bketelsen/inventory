@@ -1,5 +1,0 @@
-description: 2U AMD Ryzen 9 5950X
-location: Office Rack, Shelf 1
-server:
-    address: 192.168.1.10:9999
-verbose: false

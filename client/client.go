@@ -30,7 +30,7 @@ func NewClient(config types.Config) *Client {
 }
 func (r *Client) Send() error {
 
-	slog.Info("starting inventory client", "address", r.config.Server.Address, "verbose", r.config.Verbose)
+	slog.Info("starting inventory client", "remote", r.config.Server.Address, "verbose", r.config.Verbose)
 	cl, err := rpc.Dial("tcp", r.config.Server.Address) // Connect to server using config
 	if err != nil {
 		slog.Error("Error connecting to server", "address", r.config.Server.Address, "error", err)

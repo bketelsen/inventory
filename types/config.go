@@ -18,8 +18,8 @@ type Server struct {
 	Address string
 }
 
-func ReadConfig() (Config, error) {
+func ViperToStruct(v *viper.Viper) (Config, error) {
 	var c Config
-	err := viper.Unmarshal(&c)
+	err := v.Unmarshal(&c)
 	return c, err
 }

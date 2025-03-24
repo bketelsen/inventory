@@ -5,13 +5,12 @@
 version: '3'
 
 vars:
-  VERSION: 0.2.4
+  VERSION: 0.3.0
 
 includes:
   docs:
-    taskfile: ./docs/Taskfile.yml
+    taskfile: Taskfile.docs.yml
     optional: true
-    dir: ./docs
   checks:
     taskfile: Taskfile.checks.yml
     optional: true
@@ -21,7 +20,7 @@ includes:
   custom:
     taskfile: Taskfile.custom.yml
     optional: true
-
+  
 tasks:
   build:
     desc: Build the application
@@ -36,7 +35,7 @@ tasks:
   tools:
     desc: Install required tools
     cmds:
-      - go install github.com/bketelsen/toolbox/starter@latest
+      - go install github.com/bketelsen/toolbox/toolgen@latest
       - go install github.com/a-h/templ/cmd/templ@latest
 
   direnv:

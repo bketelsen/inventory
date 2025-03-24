@@ -35,6 +35,50 @@ enableInlineShortcodes: true
 module:
   imports:
     - path: github.com/imfing/hextra
+  mounts:
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: content
+    target: content
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: site/data
+    target: data
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: site/layouts
+    target: layouts
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: site/i18n
+    target: i18n
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: site/archetypes
+    target: archetypes
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: site/assets
+    target: assets
+  - disableWatch: false
+    excludeFiles: null
+    includeFiles: null
+    lang: ""
+    source: site/static
+    target: static
+
 
 
 menu:
