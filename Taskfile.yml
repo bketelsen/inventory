@@ -4,8 +4,6 @@
 
 version: '3'
 
-vars:
-  VERSION: 0.3.1
 
 includes:
   docs:
@@ -50,4 +48,4 @@ tasks:
     cmds:
       - go run main.go gendocs -b "/inventory"
     silent: true
-
+  
