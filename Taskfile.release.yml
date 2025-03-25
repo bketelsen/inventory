@@ -29,7 +29,6 @@ tasks:
       - sh: "[ $(git status --porcelain=2 | wc -l) = 0 ]"
         msg: "Git is dirty"
     cmds:
-      - git tag -d nightly
       - git tag {{.NEXT}}
       - echo {{.NEXT}}
       - git push origin --tags
