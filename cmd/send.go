@@ -46,6 +46,11 @@ and sends it to the server. It is designed to be run as a cron job or systemd ti
 It is not intended to be run interactively.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if !foundConfig {
+			cmd.Logger.Error("No config file found, cannot send inventory")
+			cmd.Logger.Info("Run 'inventory config' to create an example config file")
+			return nil
+		}
 		slog.SetDefault(cmd.Logger)
 		cmd.Logger.Info(cmd.GlobalConfig().GetString("description"))
 		// Read config

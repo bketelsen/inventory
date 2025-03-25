@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/a-h/templ v0.3.856
 	github.com/bketelsen/inclient v0.0.5
-	github.com/bketelsen/toolbox v0.4.2
+	github.com/bketelsen/toolbox v0.4.4
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
 	github.com/coreos/go-systemd/v22 v22.5.0
 	github.com/docker/docker v28.0.2+incompatible

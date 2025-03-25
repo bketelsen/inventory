@@ -31,7 +31,6 @@ import (
 
 	"github.com/bketelsen/inventory/service"
 	"github.com/bketelsen/inventory/storage"
-	"github.com/bketelsen/inventory/types"
 	"github.com/bketelsen/inventory/web"
 	"github.com/bketelsen/toolbox/cobra"
 	"github.com/coreos/go-systemd/v22/daemon"
@@ -44,15 +43,6 @@ var serveCmd = &cobra.Command{
 
 	RunE: func(cmd *cobra.Command, args []string) error {
 		slog.SetDefault(cmd.Logger)
-
-		cfg, err := types.ViperToStruct(cmd.GlobalConfig())
-		if err != nil {
-			log.Println("Error reading config:", err)
-			return err
-		}
-		cmd.Logger.Info("Starting inventory server", "httpport", cfg.HTTPPort, "rpcport", cfg.RPCPort)
-
-		// set up logging since this is a long running process
 
 		// Create a new memory storage
 		memStorage := storage.NewMemoryStorage()

@@ -28,10 +28,12 @@ import (
 
 	"github.com/bketelsen/toolbox/cobra"
 	goversion "github.com/bketelsen/toolbox/go-version"
+	"github.com/bketelsen/toolbox/slug"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
+var foundConfig bool
 var appname = "inventory"
 var (
 	version   = ""
@@ -51,6 +53,19 @@ var rootCmd = &cobra.Command{
 	Use:     "inventory",
 	Version: bversion.String(),
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if cfgFile != "" {
+			cmd.GlobalConfig().SetConfigFile(cfgFile) // Use config file from the flag if set
+		} else {
+			cmd.GlobalConfig().SetConfigName("inventory.yaml") // name of config file
+
+		}
+		if err := cmd.GlobalConfig().ReadInConfig(); err == nil {
+			slog.Info("Using config file:", slog.String("file", cmd.GlobalConfig().ConfigFileUsed()))
+		} else {
+			slog.Error("Error reading config file", slug.Err(err))
+			foundConfig = false
+
+		}
 		// set the slog default logger to the cobra logger
 		slog.SetDefault(cmd.Logger)
 		// set log level based on the --verbose flag
@@ -65,17 +80,12 @@ var rootCmd = &cobra.Command{
 		config.AutomaticEnv()
 		config.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", ""))
 		config.SetConfigType("yaml")
-		config.SetConfigFile(cfgFile)
 		config.SetConfigName("inventory.yaml")          // name of config file
 		config.AddConfigPath("/etc/inventory/")         // path to look for the config file in
 		config.AddConfigPath("$HOME/.config/inventory") // call multiple times to add many search paths
 		config.AddConfigPath("$HOME/.inventory")        // deprecate this in the future, keep home clean
 		config.AddConfigPath(".")                       // optionally look for config in the working directory
-		if err := config.ReadInConfig(); err == nil {
-			slog.Info("Using config file:", slog.String("file", config.ConfigFileUsed()))
-		} else {
-			slog.Info("No config file found, using defaults")
-		}
+
 		return config
 	},
 	Example: `//client
