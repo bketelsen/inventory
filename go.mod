@@ -1,7 +1,6 @@
 module github.com/bketelsen/inventory
 
 go 1.24.0
-
 require (
 	github.com/a-h/templ v0.3.856
 	github.com/bketelsen/inclient v0.0.5
@@ -11,7 +10,7 @@ require (
 	github.com/docker/docker v28.0.2+incompatible
 	github.com/jackpal/gateway v1.0.16
 	github.com/lxc/incus/v6 v6.10.1
-	github.com/spf13/viper v1.20.0
+	github.com/spf13/viper v1.20.1
 )
 
 require (
