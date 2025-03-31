@@ -1,9 +1,8 @@
 module github.com/bketelsen/inventory
 
 go 1.24.0
-
 require (
-	github.com/a-h/templ v0.3.856
+	github.com/a-h/templ v0.3.857
 	github.com/bketelsen/inclient v0.0.5
 	github.com/bketelsen/toolbox v0.4.4
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
