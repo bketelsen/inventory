@@ -4,6 +4,7 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"log/slog"
@@ -16,7 +17,8 @@ import (
 
 // searchCmd represents the search command
 var searchCmd = &cobra.Command{
-	Use: "search [query]",
+	Use:          "search [query]",
+	SilenceUsage: true,
 	Example: `inventory search jellyfin
 // more verbose output
 inventory search --verbose jellyfin
@@ -27,6 +29,11 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 	Long:  `Search returns a list of services, listeners, and containers that match the query.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		slog.SetDefault(cmd.Logger)
+		if !foundConfig {
+			cmd.Logger.Error("No config file found, cannot search inventory")
+			cmd.Logger.Info("Run 'inventory config' to create an example config file")
+			return errors.New("no config file found")
+		}
 		// Read config
 		config, err := types.ViperToStruct(cmd.GlobalConfig())
 		if err != nil {
@@ -39,14 +46,14 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 		cl := client.NewClient(config)
 		result, err := cl.Search(args[0])
 		if err != nil {
-			cmd.Println(ui.Error("Error searching", err.Error()))
+			ui.Error("Error searching", err.Error())
 			return err
 		}
 		if len(result) == 0 {
-			cmd.Println(ui.Info("No results found"))
+			ui.Info("No results found")
 			return nil
 		}
-		cmd.Println(ui.Info(fmt.Sprintf("Found %d server with \"%s\"", len(result), args[0])))
+		ui.Info(fmt.Sprintf("Found %d server with \"%s\"", len(result), args[0]))
 
 		for _, r := range result {
 			if len(r.Listeners) > 0 {
@@ -54,7 +61,7 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 
 				out, err := ui.DisplayTable(r.Listeners, "", nil)
 				if err != nil {
-					cmd.Println(ui.Error("Error displaying results", err.Error()))
+					ui.Error("Error displaying results", err.Error())
 				}
 				cmd.Println(out)
 				cmd.Println()
@@ -63,7 +70,7 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 				cmd.Printf("Found %d Services on %s / %s:\n", len(r.Services), r.Host.HostName, r.Host.IP)
 				out, err := ui.DisplayTable(r.Services, "", nil)
 				if err != nil {
-					cmd.Println(ui.Error("Error displaying results", err.Error()))
+					ui.Error("Error displaying results", err.Error())
 				}
 				cmd.Println(out)
 				cmd.Println()
@@ -74,7 +81,7 @@ inventory search --verbose --config /path/to/config.yaml jellyfin`,
 
 				out, err := ui.DisplayTable(r.Containers, "", nil)
 				if err != nil {
-					cmd.Println(ui.Error("Error displaying results", err.Error()))
+					ui.Error("Error displaying results", err.Error())
 				}
 				cmd.Println(out)
 				cmd.Println()

@@ -78,7 +78,7 @@ var serveCmd = &cobra.Command{
 		http.Handle("/", web.NewInventoryHandler(memStorage))
 
 		httpPort := cmd.Config().GetInt("http-port")
-		httpStr := fmt.Sprintf("0.0.0.0:%d", httpPort)
+		httpStr := fmt.Sprintf(":%d", httpPort)
 		cmd.Logger.Info("http server listening", "port", httpPort)
 		if err := http.ListenAndServe(httpStr, nil); err != nil {
 			cmd.Logger.Error(fmt.Sprintf("error listening: %v", err))

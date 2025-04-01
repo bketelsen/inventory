@@ -35,6 +35,7 @@ tasks:
     cmds:
       - go install github.com/bketelsen/toolbox/toolgen@latest
       - go install github.com/a-h/templ/cmd/templ@latest
+      - go install github.com/caarlos0/svu/v3@latest
 
   direnv:
     desc: Add direnv hook to your bashrc

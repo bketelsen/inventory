@@ -72,16 +72,16 @@ The server.address is the IP:port of the inventory server.`,
 		v.Set("verbose", false)
 		v.WriteConfigAs("inventory.example.yaml")
 
-		cmd.Println(ui.Info("Sample config file created:",
+		ui.Info("Sample config file created:",
 			"./inventory.example.yaml",
 			"Move the file to /etc/inventory/inventory.yaml or ~/.inventory/inventory.yaml",
 			"-- be sure to remove the .example part of the filename extension --",
-			"to use it automatically"))
-		cmd.Println(ui.Info("Example:",
+			"to use it automatically")
+		ui.Info("Example:",
 			ui.Code("`inventory config`"),
 			ui.Code("`sudo mkdir -p /etc/inventory`"),
-			ui.Code("`sudo mv inventory.example.yaml /etc/inventory/inventory.yaml`")))
-		cmd.Println(ui.Info("Edit the file to set your actual server address and location."))
+			ui.Code("`sudo mv inventory.example.yaml /etc/inventory/inventory.yaml`"))
+		ui.Info("Edit the file to set your actual server address and location.")
 	},
 }
 
