@@ -60,11 +60,11 @@ var rootCmd = &cobra.Command{
 
 		}
 		if err := cmd.GlobalConfig().ReadInConfig(); err == nil {
-			slog.Info("Using config file:", slog.String("file", cmd.GlobalConfig().ConfigFileUsed()))
+			defer slog.Debug("Using config file:", slog.String("file", cmd.GlobalConfig().ConfigFileUsed()))
+			foundConfig = true
 		} else {
-			slog.Error("Error reading config file", slug.Err(err))
+			defer slog.Debug("Error reading config file", slug.Err(err))
 			foundConfig = false
-
 		}
 		// set the slog default logger to the cobra logger
 		slog.SetDefault(cmd.Logger)
