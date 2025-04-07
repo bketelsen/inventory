@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/a-h/templ v0.3.857
 	github.com/bketelsen/inclient v0.0.5
-	github.com/bketelsen/toolbox v0.6.1
+	github.com/bketelsen/toolbox v0.8.0
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
 	github.com/coreos/go-systemd/v22 v22.5.0
 	github.com/docker/docker v28.0.4+incompatible
@@ -55,6 +55,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/moby/term v0.5.2 // indirect
