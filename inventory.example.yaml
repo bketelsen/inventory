@@ -1,5 +1,22 @@
-description: 2U AMD Ryzen 9 5950X
-location: Office Rack, Shelf 1
+client:
+    description: Generic Server
+    location: Home Lab
+    remote: 192.168.5.1:9999
+debug: false
+log-level: 0
 server:
-    address: 192.168.1.10:9999
-verbose: false
+    http-port: 8000
+    listen: 0.0.0.0
+    rpc-port: 9999
+services:
+    - name: syncthing
+      port: 0
+      listeners:
+        - port: 8384
+          listen_address: 0.0.0.0
+          protocol: tcp
+        - port: 22000
+          listen_address: 0.0.0.0
+          protocol: tcp
+      protocol: ""
+      unit: syncthing@.service

@@ -12,18 +12,21 @@ Example systemd unit files are in the `/contrib` folder, along with example cron
 
 ## Configuration
 
-`inventory` searches `/etc/inventory/`, `$HOME/.config/inventory/` and `$HOME/.inventory/`(deprecated) for a yaml formatted file named `inventory.yaml` with configuration values.
-
-Currently, you can set log level to verbose, and specify the server where reports are sent.
+`inventory` searches `/etc/inventory/`, `$HOME/.config/inventory/` and `$HOME/.inventory/`(deprecated) for a yaml formatted file named `inventory.yml` with configuration values.
 
 Example config:
 
 ```yaml
+client:
+    description: Generic Server
+    location: Home Lab
+    remote: 192.168.5.1:9999
+debug: false
+log-level: 0
 server:
-  address: "10.0.1.5:9999"
-verbose: false
-
-
+    http-port: 8000
+    listen: 0.0.0.0
+    rpc-port: 9999
 ```
 
 If you want to track services that aren't deployed via docker or incus, you can add them as an array to the config file like this:
@@ -31,11 +34,16 @@ If you want to track services that aren't deployed via docker or incus, you can 
 ```yaml
 services:
     - name: syncthing
-      port: 8384
-      listenaddress: 10.0.1.15
-      protocol: tcp
-      unit: syncthing@.service 
-
+      port: 0
+      listeners:
+        - port: 8384
+          listen_address: 0.0.0.0
+          protocol: tcp
+        - port: 22000
+          listen_address: 0.0.0.0
+          protocol: tcp
+      protocol: ""
+      unit: syncthing@.service
 ```
 
 ## Permissions

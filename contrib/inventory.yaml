@@ -1,11 +1,22 @@
+client:
+    description: Generic Server
+    location: Home Lab
+    remote: 192.168.5.1:9999
+debug: false
+log-level: 0
 server:
-  address: "10.0.1.165:9999"
+    http-port: 8000
+    listen: 0.0.0.0
+    rpc-port: 9999
 services:
     - name: syncthing
-      port: 8384
-      listenaddress: 10.0.0.165
-      protocol: tcp
-      unit: syncthing@.service 
-verbose: false
-location: office
-description: 2U rackmount server
+      port: 0
+      listeners:
+        - port: 8384
+          listen_address: 0.0.0.0
+          protocol: tcp
+        - port: 22000
+          listen_address: 0.0.0.0
+          protocol: tcp
+      protocol: ""
+      unit: syncthing@.service

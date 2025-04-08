@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"fmt"
@@ -7,15 +7,13 @@ import (
 	"github.com/bketelsen/toolbox/cobra"
 	mcoral "github.com/bketelsen/toolbox/mcobra"
 	"github.com/muesli/roff"
+	"github.com/spf13/viper"
 )
 
-type manCmd struct {
-	cmd *cobra.Command
-}
+// Build the cobra command that handles our command line tool.
+func NewManCommand(config *viper.Viper) *cobra.Command {
 
-func newManCmd() *manCmd {
-	root := &manCmd{}
-	cmd := &cobra.Command{
+	manCmd := &cobra.Command{
 		Use:                   "man",
 		Short:                 "Generates inventory's command line manpages",
 		SilenceUsage:          true,
@@ -23,8 +21,8 @@ func newManCmd() *manCmd {
 		Hidden:                true,
 		Args:                  cobra.NoArgs,
 		ValidArgsFunction:     cobra.NoFileCompletions,
-		RunE: func(_ *cobra.Command, _ []string) error {
-			manPage, err := mcoral.NewManPage(1, root.cmd.Root())
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			manPage, err := mcoral.NewManPage(1, cmd.Root())
 			if err != nil {
 				return err
 			}
@@ -34,11 +32,5 @@ func newManCmd() *manCmd {
 		},
 	}
 
-	root.cmd = cmd
-	return root
-}
-
-func init() {
-	manCmd := newManCmd()
-	rootCmd.AddCommand(manCmd.cmd)
+	return manCmd
 }

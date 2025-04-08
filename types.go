@@ -1,9 +1,12 @@
-package types
+// Package inventory provides the data structures and types used in the inventory service
+package inventory
 
 import (
 	"net"
+	"time"
 )
 
+// ContainerPlatform represents the platform on which a container is running
 type ContainerPlatform int
 
 const (
@@ -13,6 +16,7 @@ const (
 	Podman
 )
 
+// String returns the string representation of the ContainerPlatform
 func (p ContainerPlatform) String() string {
 	switch p {
 	case Docker:
@@ -36,6 +40,12 @@ type Report struct {
 	Services   []Service   `table:"services"`
 	Listeners  []Listener  `table:"listeners"`
 	Containers []Container `table:"containers"`
+	Timestamp  time.Time   `table:"timestamp" `
+}
+
+// DisplayTime returns the timestamp in a human-readable format
+func (r *Report) DisplayTime() string {
+	return r.Timestamp.Format(time.UnixDate)
 }
 
 // Host represents the host information
@@ -48,10 +58,10 @@ type Report struct {
 // The description field can be used to provide a brief description of the host,
 // such as its purpose or role in the network or a physical description of the host.
 type Host struct {
-	HostName    string `table:"hostname,default_sort"`
-	IP          string `table:"ip"`
-	Location    string `table:"location"`
-	Description string `table:"description"`
+	HostName    string `table:"hostname,default_sort" json:"host_name,omitempty"`
+	IP          string `table:"ip" json:"ip,omitempty"`
+	Location    string `table:"location" json:"location,omitempty"`
+	Description string `table:"description" json:"description,omitempty"`
 }
 
 // Service represents a service running on the host
@@ -62,11 +72,18 @@ type Host struct {
 // or any other type of service that listens for incoming connections.
 // They are provided to account for services that are not necessarily containers.
 type Service struct {
-	Name          string `table:"name,default_sort"`
-	Port          uint16 `table:"port"`
-	ListenAddress string `table:"listen_address"`
-	Protocol      string `table:"protocol"`
-	Unit          string `table:"unit"`
+	Name      string    `table:"name,default_sort" json:"name,omitempty"`
+	Port      uint16    `table:"port" json:"port,omitempty"`
+	Listeners []*Listen `table:"listeners" json:"listeners,omitempty"`
+	Protocol  string    `table:"protocol" json:"protocol,omitempty"`
+	Unit      string    `table:"unit" json:"unit,omitempty"`
+}
+
+// Listen represents a network listener for a service
+type Listen struct {
+	Port          uint16 `table:"port" json:"port,omitempty"`
+	ListenAddress string `yaml:"listen_address" table:"listen_address" json:"listen_address,omitempty"`
+	Protocol      string `table:"protocol" json:"protocol,omitempty"`
 }
 
 // Listener represents a network listener on the host
@@ -74,10 +91,10 @@ type Service struct {
 // the PID of the process that is listening, and the name of the program
 // that is listening.
 type Listener struct {
-	ListenAddress net.IP `table:"listen_address"`
-	Port          uint16 `table:"port"`
-	PID           int    `table:"pid"`
-	Program       string `table:"program,default_sort"`
+	ListenAddress net.IP `table:"listen_address" json:"listen_address,omitempty"`
+	Port          uint16 `table:"port" json:"port,omitempty"`
+	PID           int    `table:"pid" json:"pid,omitempty"`
+	Program       string `table:"program,default_sort" json:"program,omitempty"`
 }
 
 // Container represents a container running on the host
@@ -95,10 +112,10 @@ type Listener struct {
 // The platform field indicates the container platform that is being used,
 // such as Docker, Incus, KVM, or Podman.
 type Container struct {
-	ContainerID string            `table:"container_id,default_sort"`
-	Image       string            `table:"image"`
-	IP          net.IPAddr        `table:"ip"`
-	Ports       []string          `table:"ports"`
-	HostName    string            `table:"hostname"`
-	Platform    ContainerPlatform `table:"platform"`
+	ContainerID string            `table:"container_id,default_sort" json:"container_id,omitempty"`
+	Image       string            `table:"image" json:"image,omitempty"`
+	IP          net.IPAddr        `table:"ip" json:"ip,omitempty"`
+	Ports       []string          `table:"ports" json:"ports,omitempty"`
+	HostName    string            `table:"hostname" json:"host_name,omitempty"`
+	Platform    ContainerPlatform `table:"platform" json:"platform,omitempty"`
 }

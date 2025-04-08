@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/bketelsen/inventory/types"
+	"github.com/bketelsen/inventory"
 	"time"
 
 	"strconv"
@@ -29,7 +29,7 @@ templ navTemplate() {
 	</nav>
 }
 
-templ layout(name string, reports []types.Report) {
+templ layout(name string, reports []inventory.Report) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -209,7 +209,7 @@ templ layout(name string, reports []types.Report) {
 	</html>
 }
 
-templ hostsList(reports []types.Report) {
+templ hostsList(reports []inventory.Report) {
 	@hostTable(reports)
 	@serviceTable(reports)
 	@containerTable(reports)
@@ -272,7 +272,7 @@ templ statistic(value string, label string) {
 	</div>
 }
 
-templ reports(reports []types.Report) {
+templ reports(reports []inventory.Report) {
 	@layout("Inventory | Services", reports) {
 		@contentHeader("All")
 		@appContent() {
@@ -290,7 +290,7 @@ templ reports(reports []types.Report) {
 	}
 }
 
-func serviceCount(reports []types.Report) int {
+func serviceCount(reports []inventory.Report) int {
 	count := 0
 	for _, report := range reports {
 		count += len(report.Services)
@@ -298,7 +298,7 @@ func serviceCount(reports []types.Report) int {
 	return count
 }
 
-func listenerCount(reports []types.Report) int {
+func listenerCount(reports []inventory.Report) int {
 	count := 0
 	for _, report := range reports {
 		count += len(report.Listeners)
@@ -306,7 +306,7 @@ func listenerCount(reports []types.Report) int {
 	return count
 }
 
-func containerCount(reports []types.Report) int {
+func containerCount(reports []inventory.Report) int {
 	count := 0
 	for _, report := range reports {
 		count += len(report.Containers)
@@ -314,7 +314,7 @@ func containerCount(reports []types.Report) int {
 	return count
 }
 
-templ containerTable(reports []types.Report) {
+templ containerTable(reports []inventory.Report) {
 	<div class="card mb-4">
 		<div class="card-header border-0">
 			<h3 class="card-title">Containers</h3>
@@ -367,7 +367,7 @@ templ containerTable(reports []types.Report) {
 	</div>
 }
 
-templ serviceTable(reports []types.Report) {
+templ serviceTable(reports []inventory.Report) {
 	<div class="card mb-4">
 		<div class="card-header border-0">
 			<h3 class="card-title">Services</h3>
@@ -392,7 +392,11 @@ templ serviceTable(reports []types.Report) {
 								<td>
 									{ service.Name }
 								</td>
-								<td>{ service.ListenAddress }:{ strconv.Itoa(int(service.Port)) }/{ service.Protocol }</td>
+								<td>
+								for _, l := range service.Listeners {
+									{ l.ListenAddress }:{ strconv.Itoa(int(l.Port)) }/{ l.Protocol }<br/>
+								}
+								</td>
 								<td>
 									{ service.Unit }
 								</td>
@@ -405,7 +409,7 @@ templ serviceTable(reports []types.Report) {
 	</div>
 }
 
-templ hostTable(reports []types.Report) {
+templ hostTable(reports []inventory.Report) {
 	<div class="card mb-4">
 		<div class="card-header border-0">
 			<h3 class="card-title">Servers</h3>
@@ -418,6 +422,7 @@ templ hostTable(reports []types.Report) {
 						<th>IP</th>
 						<th>Location</th>
 						<th>Description</th>
+						<th>Last Update</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -433,6 +438,9 @@ templ hostTable(reports []types.Report) {
 							<td>
 								{ report.Host.Description }
 							</td>
+							<td>
+								{ report.DisplayTime() }
+							</td>
 						</tr>
 					}
 				</tbody>
@@ -441,7 +449,7 @@ templ hostTable(reports []types.Report) {
 	</div>
 }
 
-templ listenerTable(reports []types.Report) {
+templ listenerTable(reports []inventory.Report) {
 	<div class="card mb-4">
 		<div class="card-header border-0">
 			<h3 class="card-title">Listeners</h3>

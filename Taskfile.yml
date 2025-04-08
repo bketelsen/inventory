@@ -27,13 +27,12 @@ tasks:
 
       Output: 'inventory' in project root.
     cmds:
-      - go build -o inventory -ldflags '-s -w -X github.com/bketelsen/inventory/cmd.version={{.VERSION}}-dev' main.go
+      - go build -o inventory -ldflags '-s -w -X main.version=local-dev' ./cmd/inventory
     silent: true
 
   tools:
     desc: Install required tools
     cmds:
-      - go install github.com/bketelsen/toolbox/toolgen@latest
       - go install github.com/a-h/templ/cmd/templ@latest
       - go install github.com/caarlos0/svu/v3@latest
 
@@ -47,6 +46,6 @@ tasks:
     desc: Generate CLI documentation
     deps: [tools]
     cmds:
-      - go run main.go gendocs -b "/inventory"
+      - NOCOLOR=1 go run ./cmd/inventory gendocs -b "/inventory" 
     silent: true
   

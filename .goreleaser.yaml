@@ -11,7 +11,7 @@ before:
     - templ generate
 after:
   hooks:
-    - go run main.go gendocs -b "/inventory"
+    - NOCOLOR=1 go run ./cmd/inventory gendocs -b "/inventory"
 builds:
   - env:
       - CGO_ENABLED=0
@@ -22,11 +22,11 @@ builds:
       - arm64
     binary: inventory
     id: inventory
+    main: ./cmd/inventory
     # Default: '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser'.
     # Templates: allowed.
     ldflags:
-      - '-s -w -X github.com/bketelsen/inventory/cmd.date={{ .CommitDate }} -X github.com/bketelsen/inventory/cmd.treeState={{ .IsGitDirty }} -X github.com/bketelsen/inventory/cmd.version={{.Version}} -X github.com/bketelsen/inventory/cmd.commit={{.Commit}} -X github.com/bketelsen/inventory/cmd.builtBy=goreleaser'
-
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
 archives:
   - formats: [ 'tar.gz' ]
     # this name template makes the OS and Arch compatible with the results of `uname`.

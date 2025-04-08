@@ -24,7 +24,7 @@ jobs:
     - name: Tools
       run: go install github.com/a-h/templ/cmd/templ@latest
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./cmd/inventory 
 
     - name: Test
       run: go test -v ./...

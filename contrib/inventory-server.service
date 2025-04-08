@@ -11,7 +11,7 @@ RestartSec=30
 TimeoutStartSec=0
 
 WorkingDirectory=/home/bjk
-ExecStart=/usr/local/bin/inventory serve
+ExecStart=/usr/local/bin/inventory server
 User=bjk
 Group=bjk
 NoNewPrivileges=true
