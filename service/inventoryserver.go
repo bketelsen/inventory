@@ -1,3 +1,5 @@
+// Package service provides the inventory server implementation
+// It implements the RPC methods for the inventory server
 package service
 
 import (
@@ -5,38 +7,39 @@ import (
 	"fmt"
 	"log/slog"
 	"strings"
+	"time"
 
-	"github.com/bketelsen/inventory/storage"
-	"github.com/bketelsen/inventory/types"
+	"github.com/bketelsen/inventory"
 )
 
-// Define a struct. This struct will bind all the RPC methods
+// InventoryServer implements the inventory server interface
 type InventoryServer struct {
-	storage storage.Storage
+	storage inventory.Storage
 }
 
 // NewInventoryServer creates a new server with the provided storage
-func NewInventoryServer(storage storage.Storage) *InventoryServer {
+func NewInventoryServer(storage inventory.Storage) *InventoryServer {
 	return &InventoryServer{
 		storage: storage,
 	}
 }
 
-// Update is the method that the client will call
-func (c *InventoryServer) Update(report *types.Report, reply *int) error {
+// Update is the method that the client will call to send a report
+func (c *InventoryServer) Update(report *inventory.Report, reply *int) error {
 	if report == nil {
 		return errors.New("report cannot be nil")
 	}
+	report.Timestamp = time.Now()
 
 	slog.Info("Received report", "host", report.Host.HostName, "ip", report.Host.IP)
 	for _, l := range report.Listeners {
-		slog.Info("Listener", "address", l.ListenAddress, "pid", l.PID, "port", l.Port, "program", l.Program, "app", l.Program)
+		slog.Debug("Listener", "host", report.Host.HostName, "address", l.ListenAddress, "pid", l.PID, "port", l.Port, "program", l.Program, "app", l.Program)
 	}
 	for _, ct := range report.Containers {
-		slog.Info("Container", "container", ct.ContainerID, "ip", ct.IP.String(), "hostname", ct.HostName, "platform", ct.Platform, "image", ct.Image)
+		slog.Debug("Container", "host", report.Host.HostName, "container", ct.ContainerID, "ip", ct.IP.String(), "hostname", ct.HostName, "platform", ct.Platform, "image", ct.Image)
 	}
 	for _, s := range report.Services {
-		slog.Info("Service", "name", s.Name, "port", s.Port, "protocol", s.Protocol)
+		slog.Debug("Service", "host", report.Host.HostName, "name", s.Name, "port", s.Port, "protocol", s.Protocol)
 	}
 
 	// Store the report in persistent storage
@@ -50,8 +53,9 @@ func (c *InventoryServer) Update(report *types.Report, reply *int) error {
 	return nil
 }
 
-// Update is the method that the client will call
-func (c *InventoryServer) Search(query string, reply *[]types.Report) error {
+// Search is the method that the client will call to search for reports
+// It takes a query string and returns a list of reports that match the query
+func (c *InventoryServer) Search(query string, reply *[]inventory.Report) error {
 	if query == "" {
 		return errors.New("query cannot be nil")
 	}
@@ -64,17 +68,17 @@ func (c *InventoryServer) Search(query string, reply *[]types.Report) error {
 	}
 	for _, report := range reports {
 		found := false
-		rpt := types.Report{
+		rpt := inventory.Report{
 			Host:       report.Host,
-			Services:   []types.Service{},
-			Containers: []types.Container{},
-			Listeners:  []types.Listener{},
+			Services:   []inventory.Service{},
+			Containers: []inventory.Container{},
+			Listeners:  []inventory.Listener{},
 		}
 		// iterate through reports and find matches on services and containers
 		for _, service := range report.Services {
 			lowerServiceName := strings.ToLower(service.Name)
 			if strings.Contains(lowerServiceName, strings.ToLower(query)) {
-				slog.Info("Found service", "service", service.Name, "host", report.Host.HostName)
+				slog.Debug("Found service", "service", service.Name, "host", report.Host.HostName)
 				rpt.Services = append(rpt.Services, service)
 				found = true
 			}
@@ -84,7 +88,7 @@ func (c *InventoryServer) Search(query string, reply *[]types.Report) error {
 			lowerImageName := strings.ToLower(container.Image)
 			lowerHostName := strings.ToLower(container.HostName)
 			if strings.Contains(lowerContainerName, strings.ToLower(query)) || strings.Contains(lowerImageName, strings.ToLower(query)) || strings.Contains(lowerHostName, strings.ToLower(query)) {
-				slog.Info("Found container", "container", container.ContainerID, "host", report.Host.HostName)
+				slog.Debug("Found container", "container", container.ContainerID, "host", report.Host.HostName)
 				rpt.Containers = append(rpt.Containers, container)
 				found = true
 			}
@@ -93,7 +97,7 @@ func (c *InventoryServer) Search(query string, reply *[]types.Report) error {
 
 			lowerListenerName := strings.ToLower(listener.Program)
 			if strings.Contains(lowerListenerName, strings.ToLower(query)) {
-				slog.Info("Found listener", "program", listener.Program, "host", report.Host.HostName)
+				slog.Debug("Found listener", "program", listener.Program, "host", report.Host.HostName)
 				rpt.Listeners = append(rpt.Listeners, listener)
 				found = true
 			}
