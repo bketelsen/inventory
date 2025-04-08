@@ -11,7 +11,7 @@ before:
     - templ generate
 after:
   hooks:
-    - NOCOLOR=1 go run ./cmd/inventory gendocs -b "/inventory"
+    - export NOCOLOR=1; go run ./cmd/inventory gendocs -b "/inventory"
 builds:
   - env:
       - CGO_ENABLED=0
