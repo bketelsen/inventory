@@ -70,6 +70,6 @@ is in markdown format.`,
 		return nil
 	}
 	// Define cobra flags, the default value has the lowest (least significant) precedence
-	gendocsCmd.Flags().StringP("output", "o", "www/docs/cmd", "Output directory for the documentation (default is www/docs/cmd)")
+	gendocsCmd.Flags().StringP("output", "o", "docs", "Output directory for the documentation (default is docs)")
 	return gendocsCmd
 }
