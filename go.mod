@@ -18,6 +18,7 @@ require (
 	github.com/thediveo/enumflag/v2 v2.0.7
 	go.uber.org/automaxprocs v1.6.0
 )
+
 //replace github.com/bketelsen/toolbox => ../toolbox
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect

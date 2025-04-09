@@ -11,7 +11,6 @@ import (
 
 // NewConfigCommand creates a new command to generate an example configuration file
 func NewConfigCommand(config *viper.Viper) *cobra.Command {
-
 	configCmd := &cobra.Command{
 		Use:   "config",
 		Short: "Create an configuration file for the inventory application",
@@ -43,8 +42,7 @@ sudo mv inventory.example.yaml /etc/inventory/inventory.yaml
 
 Be sure to edit the file to set your actual server address and location.
 The server.address is the IP:port of the inventory server.`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			// check if the config file exists
 			_, err := os.Stat(config.GetString("config-file"))
 			if err == nil {

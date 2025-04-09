@@ -22,16 +22,13 @@ THE SOFTWARE.
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
-	"path"
 	"path/filepath"
-	"strings"
-	"time"
 
 	"github.com/bketelsen/toolbox/cobra"
 	"github.com/bketelsen/toolbox/cobra/doc"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/termenv"
 	"github.com/spf13/viper"
 )
 
@@ -45,48 +42,34 @@ func NewGendocsCommand(config *viper.Viper) *cobra.Command {
 		Long: `Generates documentation for the command using the cobra doc generator.
 The documentation is generated in the ./content/docs/cli directory and
 is in markdown format.`,
-		Run: func(cmd *cobra.Command, args []string) {
-			bp := config.GetString("docs.basepath")
-			cmd.Logger.Info("Base path for documentation", "basepath", bp)
-			linkHandler := func(name string) string {
-				base := strings.TrimSuffix(name, path.Ext(name))
-				return bp + "/docs/cli/" + strings.ToLower(base) + "/"
-			}
-			filePrepender := func(filename string) string {
-				now := time.Now().Format(time.RFC3339)
-				name := filepath.Base(filename)
-				base := strings.TrimSuffix(name, path.Ext(name))
-				url := "/docs/cli/" + strings.ToLower(base) + "/"
-				return fmt.Sprintf(fmTemplate, now, strings.Replace(base, "_", " ", -1), base, url)
-			}
-			err := os.MkdirAll("./content/docs/cli/", 0755)
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			lipgloss.DefaultRenderer().SetColorProfile(termenv.Ascii)
+
+			o := config.GetString("docs.output")
+			cmd.Root().DisableAutoGenTag = true
+			wd, err := os.Getwd()
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
-			err = doc.GenMarkdownTreeCustom(cmd.Root(), "./content/docs/cli/", filePrepender, linkHandler)
-			if err != nil {
-				log.Fatal(err)
+			target := filepath.Join(wd, o)
+			if err := os.MkdirAll(target, 0o755); err != nil {
+				return err
 			}
+			return doc.GenMarkdownTreeCustom(cmd.Root(), o, func(_ string) string {
+				return ""
+			}, func(s string) string {
+				return s
+			})
 		},
 	}
 
 	//	gendocsCmd.Flags().StringP("basepath", "b", "inventory", "Base path for the documentation (default is /inventory)")
 
 	gendocsCmd.PreRunE = func(cmd *cobra.Command, _ []string) error {
-		_ = config.BindPFlag("docs.basepath", cmd.Flags().Lookup("basepath"))
+		_ = config.BindPFlag("docs.output", cmd.Flags().Lookup("output"))
 		return nil
-
 	}
 	// Define cobra flags, the default value has the lowest (least significant) precedence
-	gendocsCmd.Flags().StringP("basepath", "b", "inventory", "Base path for the documentation (default is /inventory)")
-
+	gendocsCmd.Flags().StringP("output", "o", "www/docs/cmd", "Output directory for the documentation (default is www/docs/cmd)")
 	return gendocsCmd
 }
-
-const fmTemplate = `---
-date: %s
-title: "%s"
-slug: %s
-url: %s
----
-`

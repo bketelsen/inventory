@@ -3,11 +3,10 @@
 package storage
 
 import (
+	"log/slog"
 	"slices"
 	"strings"
 	"sync"
-
-	"log/slog"
 
 	"github.com/bketelsen/inventory"
 )

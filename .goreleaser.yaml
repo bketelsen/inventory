@@ -8,10 +8,10 @@ before:
     # You may remove this if you don't use go modules.
     - go mod tidy
     - go install github.com/a-h/templ/cmd/templ@latest
-    - templ generate
-after:
-  hooks:
-    - go run ./cmd/inventory gendocs -b "/inventory"
+    - templ generate  
+    - ./scripts/completions.sh
+    - ./scripts/manpages.sh
+
 builds:
   - env:
       - CGO_ENABLED=0
@@ -42,6 +42,9 @@ archives:
     format_overrides:
       - goos: windows
         formats: [ 'zip' ]
+    files:
+      - src: "manpages/*"
+        strip_parent: true
 
 changelog:
   sort: asc
