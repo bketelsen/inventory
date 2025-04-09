@@ -94,7 +94,6 @@ func (c *InventoryServer) Search(query string, reply *[]inventory.Report) error 
 			}
 		}
 		for _, listener := range report.Listeners {
-
 			lowerListenerName := strings.ToLower(listener.Program)
 			if strings.Contains(lowerListenerName, strings.ToLower(query)) {
 				slog.Debug("Found listener", "program", listener.Program, "host", report.Host.HostName)

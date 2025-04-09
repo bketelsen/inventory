@@ -12,7 +12,7 @@ import (
 	"github.com/bketelsen/inventory"
 )
 
-// embed the dist folder
+// Static is the embedded static files
 //
 //go:embed static/*
 var Static embed.FS
@@ -36,7 +36,6 @@ type InventoryHandler struct {
 
 // ServeHTTP implements the http.Handler interface
 func (ph InventoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
 	ps, err := ph.GetReports()
 	if err != nil {
 		slog.Error("failed to get reports", "error", err)
@@ -68,7 +67,6 @@ func (ph InventoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// clear the container slice
 					report.Containers = []inventory.Container{c}
 					filteredReports = append(filteredReports, report)
-
 				}
 			}
 		}

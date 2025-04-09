@@ -29,8 +29,8 @@ var (
 	builtBy   = ""
 )
 
-// Map 3rd party enumeration values to their textual representations
-var LoglevelIds = map[slog.Level][]string{
+// LogLevelIDs Maps 3rd party enumeration values to their textual representations
+var LogLevelIDs = map[slog.Level][]string{
 	slog.LevelDebug: {"debug"},
 	slog.LevelInfo:  {"info"},
 	slog.LevelWarn:  {"warn"},
@@ -56,7 +56,6 @@ var bversion = buildVersion(version, commit, date, builtBy, treeState)
 
 // NewRootCommand creates a new root command for the application
 func NewRootCommand() (*cobra.Command, *viper.Viper) {
-
 	// this sets the config file location & file name to the current working directory
 	// and the name of the package
 	// this is the default location for the config file
@@ -96,7 +95,7 @@ func NewRootCommand() (*cobra.Command, *viper.Viper) {
 			},
 		),
 		Version: bversion.String(),
-		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			// set the default slog logger to the cobra command
 			slog.SetDefault(cmd.Logger)
 
@@ -131,7 +130,7 @@ func NewRootCommand() (*cobra.Command, *viper.Viper) {
 		``)
 	_ = config.BindPFlag("config-file", rootCmd.PersistentFlags().Lookup("config-file"))
 	rootCmd.PersistentFlags().Var(
-		enumflag.New(&logLevel, "log", LoglevelIds, enumflag.EnumCaseInsensitive),
+		enumflag.New(&logLevel, "log", LogLevelIDs, enumflag.EnumCaseInsensitive),
 		"log-level",
 		"logging level [debug|info|warn|error]")
 	return rootCmd, config
@@ -170,7 +169,6 @@ func buildVersion(version, commit, date, builtBy, treeState string) goversion.In
 			if builtBy != "" {
 				i.BuiltBy = builtBy
 			}
-
 		},
 	)
 }

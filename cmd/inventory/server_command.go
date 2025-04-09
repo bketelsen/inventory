@@ -15,20 +15,23 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Build the cobra command that handles our command line tool.
+// NewServerCommand creates a new server command
 func NewServerCommand(config *viper.Viper) *cobra.Command {
-
 	// Define our command
 	serverCmd := &cobra.Command{
 		Use:   "server",
 		Short: "starts the RPC and HTTP servers",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			// Create a new memory storage
 			memStorage := storage.NewMemoryStorage()
 
 			// Create a new inventory server with the storage
 			server := service.NewInventoryServer(memStorage)
-			rpc.Register(server) // Register the Inventory service
+			err := rpc.Register(server) // Register the Inventory service
+			if err != nil {
+				log.Printf("Error registering RPC server: %v", err)
+				return err
+			}
 
 			sent, _ := daemon.SdNotify(false, "READY=1")
 

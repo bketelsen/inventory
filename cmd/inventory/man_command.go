@@ -10,9 +10,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Build the cobra command that handles our command line tool.
-func NewManCommand(config *viper.Viper) *cobra.Command {
-
+// NewManCommand creates a new man command
+func NewManCommand(_ *viper.Viper) *cobra.Command {
 	manCmd := &cobra.Command{
 		Use:                   "man",
 		Short:                 "Generates inventory's command line manpages",
