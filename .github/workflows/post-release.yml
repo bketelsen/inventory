@@ -1,0 +1,43 @@
+name: "Post release"
+on:
+  release:
+    types:
+      - published
+
+env:
+  # https://github.com/actions/setup-go#supported-version-syntax
+  # ex:
+  # - 1.18beta1 -> 1.18.0-beta.1
+  # - 1.18rc1 -> 1.18.0-rc.1
+  GO_VERSION: '1.24'
+
+jobs:
+
+  update-documentation:
+    name: "Update documentation"
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Update version info
+        run: ./scripts/clidocs.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          base: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch-suffix: timestamp
+          title: "docs: update documentation"
+          delete-branch: true
+
+  check-install-script:
+    name: Installation script (remote)
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -sSfL https://raw.githubusercontent.com/bketelsen/inventory/HEAD/install.sh | sh -s -- -b "./install-inventory"
