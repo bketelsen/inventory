@@ -6,30 +6,36 @@ Inventory is an application that tracks deployed services/containers. It was bui
 
 | "Where the heck did I deploy Jellyfin, and was it Docker or Incus?"
 
-## Installation
+![screenshot](_media/inventory.png "now you know")
 
-Put the binary somewhere you can find it. `/usr/local/bin/` never hurts.
+## How it Works
 
-Example systemd unit files are in the `/contrib` folder, along with example crontab and logrotate configurations.
+Inventory runs as a service, collecting reports from agents running on your servers. You can run the service and the agent on a single computer if you only have one server.
+
+The inventory server stores the reports sent by the agents in memory, no database or persistent storage is required. Set your agents to report frequently and your dashboard will be up to date even after a restart.
 
 ## Configuration
 
-`inventory` searches `/etc/inventory/`, `$HOME/.config/inventory/` and `$HOME/.inventory/`(deprecated) for a yaml formatted file named `inventory.yml` with configuration values.
+`inventory` searches `/etc/inventory/`, `$HOME/.config/inventory/` and `$HOME/.inventory/`(deprecated) for a yaml formatted file named `inventory.yml` with configuration values.  
+
+!> Choose `/etc/inventory` for most cases.
 
 Example config:
 
 ```yaml
 client:
-    description: Generic Server
-    location: Home Lab
-    remote: 192.168.5.1:9999
-debug: false
-log-level: 0
+    description: Generic Server  // This appears in the dashboard to describe your server
+    location: Home Lab           // This too.
+    remote: 192.168.5.1:9999     // This is the address of the inventory service     
+log-level: 0                     // -4 (debug), 0 (info)
 server:
-    http-port: 8000
-    listen: 0.0.0.0
-    rpc-port: 9999
+    http-port: 8000              // If you are running a server, this is the dashboard port
+    listen: 0.0.0.0              // Listen address, choose 0.0.0.0 for all, or pick a specific IP
+    rpc-port: 9999               // RPC port the client will use
 ```
+
+!> Generate a config file with the `inventory config` command.
+
 
 If you want to track services that aren't deployed via docker or incus, you can add them as an array to the config file like this:
 
@@ -54,9 +60,6 @@ The `inventory send` command should be run by a user who belongs to the `docker`
 or any other user in those groups.
 
 
-## Web Template
-
-Web template modified from [AdminLTE](https://github.com/ColorlibHQ/AdminLTE), MIT License, Copyright (c) 2014-2023 ColorlibHQ
 
 
 

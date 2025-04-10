@@ -4,6 +4,7 @@
 
   - [Installation](install.md)
   - [Quick start](quickstart.md)
+  - [Security](security.md)
 
 - CLI Reference
 
