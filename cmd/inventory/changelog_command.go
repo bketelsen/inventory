@@ -35,7 +35,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// NewGendocsCommand creates a new command to generate documentation for the project
+// NewChangelogCommand creates a new command to generate a changelog for the project
 func NewChangelogCommand(config *viper.Viper) *cobra.Command {
 	// gendocsCmd represents the gendocs command
 	changelogCmd := &cobra.Command{
