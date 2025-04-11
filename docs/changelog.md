@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.5.1
+### Released 2025-04-11
+### ## Changelog
+### Bug fixes
+* 3deca23813fefbfd11221342095236b2e1b6e835: fix: install deps (#54) (@bketelsen)
+* 87de61f41904804fa867533c1258b7fc73797c11: fix: more fixing (#60) (@bketelsen)
+* 5540e0b3890ec5444e07008b79d51d28e39ae673: fix: svu (#57) (@bketelsen)
+* d2731f8a1e38e39e8051cc4d66a24aa663ddf2f3: fix: svu (#59) (@bketelsen)
+* dd36d0a71b4d80e3783f45ed15ed2df146118ac9: fix: version in taskfile (#51) (@bketelsen)
+### Other work
+* 69377a88d39fa451ed3cb3c2e89449f1e42002a8: Update post-release.yml (#53) (@bketelsen)
+* 0cf1c8439393e1295e4901d6a14802a8d0c3683d: Update post-release.yml (#55) (@bketelsen)
+* 39c0b139091c00aedba6fbb111724ab6557f5e46: [create-pull-request] automated change (#61) (@github-actions[bot])
+
+
+---
+Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
 ## v0.5.0
 ### Released 2025-04-11
 ### ## Changelog
@@ -33,16 +51,6 @@ Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
 ### Released 2025-04-01
 ### ## Changelog
 * ce191815d529cdaeabafafc0fdadc3e1ee607a08 chore: update deps (#36)
-
-
----
-Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
-
-## v0.3.2
-### Released 2025-03-25
-### ## Changelog
-* f0730698a1959444e5479d77be745d96993c7134 Update Taskfile.release.yml (#30)
-* b9850acf88d22bf07f4409ebe03dc21cc551c1ef chore: add svu configuration (#29)
 
 
 ---
