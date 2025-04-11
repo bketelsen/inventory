@@ -25,6 +25,9 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
+      - name: Tools
+        run: go install github.com/caarlos0/svu@latest
+
       - name: Update version info
         run: ./scripts/clidocs.sh
 
