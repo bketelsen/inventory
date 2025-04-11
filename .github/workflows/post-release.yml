@@ -4,7 +4,9 @@ on:
   release:
     types:
       - released
-
+permissions:
+  contents: write
+  pull-requests: write
 env:
   # https://github.com/actions/setup-go#supported-version-syntax
   # ex:
