@@ -14,5 +14,5 @@
   - [inventory search](inventory_search.md)
   - [inventory completion](inventory_completion.md)
 
-
+- [Change Log](changelog.md)
 

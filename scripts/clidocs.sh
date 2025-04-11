@@ -25,3 +25,5 @@ echo $NEXT
 	-i'' \
 	 "/v[0-9]\+\.[0-9]\+\.[0-9]/c $wholething" \
 	./docs/_coverpage.md
+
+NOCOLOR=1 go run ./cmd/inventory changelog -n 4
