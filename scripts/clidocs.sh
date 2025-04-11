@@ -5,7 +5,7 @@ SED="sed"
 if which gsed >/dev/null 2>&1; then
 	SED="gsed"
 fi
-NEXT=`svu`
+NEXT=`svu current`
 wholething="# inventory <small>$NEXT</small>"
 # update this directory to the default value
 # of the `--output` flag on the doc generation command
