@@ -40,7 +40,7 @@ inventory completion bash
 ## Options inherited from parent commands
 
 ```
-  -c, --config-file string    (default "/var/home/bjk/projects/inventory/inventory.yml")
+  -c, --config-file string    (default "/home/bjk/inventory/inventory.yml")
       --log-level log        logging level [debug|info|warn|error] (default info)
 ```
 
