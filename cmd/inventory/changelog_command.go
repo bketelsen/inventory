@@ -93,9 +93,9 @@ The changelog is written to the output directory in markdown format.`,
 				n = len(changelogs)
 			}
 			for _, changelog := range changelogs[0:n] {
-				fmt.Fprintf(file, "## %s\n", changelog.TagName)
-				fmt.Fprintf(file, "### Released %s\n", changelog.PublishedAt.Format("2006-01-02"))
-				fmt.Fprintf(file, "### %s\n", changelog.Body)
+				_, _ = fmt.Fprintf(file, "## %s\n", changelog.TagName)
+				_, _ = fmt.Fprintf(file, "### Released %s\n", changelog.PublishedAt.Format("2006-01-02"))
+				_, _ = fmt.Fprintf(file, "### %s\n", changelog.Body)
 			}
 			// Print the file path
 			cmd.Println("Changelog written to:", filepath.Join(target, "CHANGELOG.md"))
