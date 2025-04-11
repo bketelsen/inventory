@@ -36,7 +36,7 @@ Inventory is a tool to collect and report deployment information
 ## Options
 
 ```
-  -c, --config-file string    (default "/home/bjk/inventory/inventory.yml")
+  -c, --config-file string    (default "/home/runner/work/inventory/inventory/inventory.yml")
   -h, --help                 help for inventory
       --log-level log        logging level [debug|info|warn|error] (default info)
 ```

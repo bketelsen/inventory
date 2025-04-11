@@ -1,7 +1,7 @@
 ![logo](_media/barcode.png)
 
 
-# inventory <small>v0.4.3</small>
+# inventory <small>v0.0.0</small>
 
 > Collect and report deployment information. 
 
