@@ -110,7 +110,7 @@ tasks:
     desc: Create a new tag
     vars:
       NEXT:
-        sh: go tool svu n
+        sh: svu n
     prompt: "This will release {{.NEXT}}. Continue?"
     preconditions:
       - sh: '[ $(git symbolic-ref --short HEAD) = "main" ]'
