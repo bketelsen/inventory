@@ -121,7 +121,7 @@ tasks:
       - git tag {{.NEXT}}
       - echo {{.NEXT}}
       - git push origin --tags
-      - GOPROXY=proxy.golang.org go list -m github.com/bketelsen/inventory@v{{.NEXT}}
+      - GOPROXY=proxy.golang.org go list -m github.com/bketelsen/inventory@{{.NEXT}}
 
   goreleaser:
     desc: Run GoReleaser either in snapshot or release mode
