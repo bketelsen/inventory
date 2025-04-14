@@ -19,8 +19,9 @@ import (
 func NewServerCommand(config *viper.Viper) *cobra.Command {
 	// Define our command
 	serverCmd := &cobra.Command{
-		Use:   "server",
-		Short: "starts the RPC and HTTP servers",
+		Use:     "server",
+		Aliases: []string{"serve"},
+		Short:   "starts the RPC and HTTP servers",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			// Create a new memory storage
 			memStorage := storage.NewMemoryStorage()
