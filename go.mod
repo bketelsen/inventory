@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/a-h/templ v0.3.857
 	github.com/bketelsen/inclient v0.0.5
-	github.com/bketelsen/toolbox v0.8.0
+	github.com/bketelsen/toolbox v0.9.0
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf
