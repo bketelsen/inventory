@@ -45,6 +45,23 @@ archives:
     files:
       - src: "manpages/*"
         strip_parent: true
+nfpms:
+  - file_name_template: "{{ .ProjectName }}_{{ .Arch }}"
+    homepage: https://github.com/bketelsen/inventory
+    description: inventory is an application that tracks deployed services/containers
+    maintainer: Brian Ketelsen <bketelsen@gmail.com>
+    license: MIT
+    vendor: Brian Ketelsen
+    formats:
+      - deb
+      - rpm
+      - apk
+      - archlinux
+    contents:
+          # Simple config file
+      - src: contrib/inventory.yaml
+        dst: /etc/inventory/inventory.example.yaml
+        type: config
 
 changelog:
   sort: asc
