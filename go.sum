@@ -12,8 +12,8 @@ github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiE
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/bketelsen/inclient v0.0.5 h1:k5H/debfGznd7i2VSCzqpWjd5z5Igm0DQCDtowDXXOM=
 github.com/bketelsen/inclient v0.0.5/go.mod h1:0FTjkxQa3bWiplU90NBTEjGMoKdsfZBWLPtPoE+GaxI=
-github.com/bketelsen/toolbox v0.8.0 h1:IaCw1O9s3v8BPmIZNlKtE1inVfaEu2pM2rjJYra9ZpU=
-github.com/bketelsen/toolbox v0.8.0/go.mod h1:XGfiiH/z6wN/iwKmVSKoiv6Iji0r3rnjHY+dkM+ArhM=
+github.com/bketelsen/toolbox v0.9.0 h1:ZPaM85ROv69+rq0JTJ5aEQCN+PqPnDF2OweffWA4YEk=
+github.com/bketelsen/toolbox v0.9.0/go.mod h1:XGfiiH/z6wN/iwKmVSKoiv6Iji0r3rnjHY+dkM+ArhM=
 github.com/bmatcuk/doublestar/v4 v4.8.1 h1:54Bopc5c2cAvhLRAzqOGCYHYyhcDHsFF4wWIR5wKP38=
 github.com/bmatcuk/doublestar/v4 v4.8.1/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5 h1:BjkPE3785EwPhhyuFkbINB+2a1xATwk8SNDWnJiD41g=
