@@ -141,7 +141,7 @@ dockers:
     build_flag_templates:
       - "--platform=linux/arm64/v8"
 docker_manifests:
-  - name_template: "bketelsen/inventory:{{ .Version }}"
+  - name_template: "ghcr.io/bketelsen/inventory:{{ .Version }}"
     image_templates:
       - "ghcr.io/bketelsen/inventory:{{ .Version }}-amd64"
       - "ghcr.io/bketelsen/inventory:{{ .Version }}-arm64v8"
