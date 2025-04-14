@@ -22,3 +22,4 @@ output.json
 .envrc
 *.pyc
 .intentionally-empty-file.o
+/inventory.yaml

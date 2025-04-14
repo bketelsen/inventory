@@ -3,7 +3,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -27,7 +26,7 @@ func NewInventoryServer(storage inventory.Storage) *InventoryServer {
 // Update is the method that the client will call to send a report
 func (c *InventoryServer) Update(report *inventory.Report, reply *int) error {
 	if report == nil {
-		return errors.New("report cannot be nil")
+		return inventory.ErrEmptyReport
 	}
 	report.Timestamp = time.Now()
 
@@ -57,14 +56,14 @@ func (c *InventoryServer) Update(report *inventory.Report, reply *int) error {
 // It takes a query string and returns a list of reports that match the query
 func (c *InventoryServer) Search(query string, reply *[]inventory.Report) error {
 	if query == "" {
-		return errors.New("query cannot be nil")
+		return inventory.ErrEmptyQuery
 	}
 
 	slog.Info("Received search query", "query", query)
 	// Perform the search in persistent storage
 	reports := c.storage.GetAllReports()
 	if reports == nil {
-		return errors.New("no reports found")
+		return inventory.ErrNoResults
 	}
 	for _, report := range reports {
 		found := false

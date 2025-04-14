@@ -32,6 +32,9 @@ func NewMemoryStorage() *MemoryStorage {
 func (ms *MemoryStorage) StoreReport(report inventory.Report) error {
 	ms.mu.Lock()
 	defer ms.mu.Unlock()
+	if report.Host.HostName == "" {
+		return inventory.ErrNoHostName
+	}
 	slog.Info("Storing report", "host", report.Host.HostName)
 	ms.reports[report.Host.HostName] = report
 	return nil
