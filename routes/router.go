@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func SetupRoutes(ctx context.Context, router chi.Router, storage inventory.Storage) (err error) {
+func SetupRoutes(_ context.Context, router chi.Router, storage inventory.Storage) (err error) {
 	if err := errors.Join(
 		setupIndexRoute(router, storage),
 	); err != nil {

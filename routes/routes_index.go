@@ -45,7 +45,7 @@ func setupIndexRoute(router chi.Router, storage inventory.Storage) error {
 		}
 
 		slog.Info("Dashboard Initial", "reports", len(reports))
-		pages.DashboardInitial(reports, platform, host).Render(r.Context(), w)
+		_ = pages.DashboardInitial(reports, platform, host).Render(r.Context(), w)
 	})
 
 	router.Get("/dashboard/data", func(w http.ResponseWriter, r *http.Request) {
@@ -86,8 +86,8 @@ func setupIndexRoute(router chi.Router, storage inventory.Storage) error {
 			}
 			reports = newReports
 		}
-		sse.MergeFragmentTempl(pages.Filters(reports))
-		sse.MergeFragmentTempl(components.Dashboard(reports))
+		_ = sse.MergeFragmentTempl(pages.Filters(reports))
+		_ = sse.MergeFragmentTempl(components.Dashboard(reports))
 
 		for {
 			select {
@@ -131,9 +131,8 @@ func setupIndexRoute(router chi.Router, storage inventory.Storage) error {
 					}
 					reports = newReports
 				}
-				sse.MergeFragmentTempl(pages.Filters(reports))
-				sse.MergeFragmentTempl(components.Dashboard(reports))
-
+				_ = sse.MergeFragmentTempl(pages.Filters(reports))
+				_ = sse.MergeFragmentTempl(components.Dashboard(reports))
 			}
 		}
 	})
