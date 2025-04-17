@@ -13,7 +13,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func setupIndexRoute(router chi.Router, storage inventory.Storage) error {
+func setupIndexRoute(router chi.Router, storage inventory.Storage) {
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		slog.Info("Index getting reports")
 		reports := storage.GetAllReports()
@@ -136,7 +136,6 @@ func setupIndexRoute(router chi.Router, storage inventory.Storage) error {
 			}
 		}
 	})
-	return nil
 }
 
 type PageSignals struct {
