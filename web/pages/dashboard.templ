@@ -1,0 +1,112 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/bketelsen/inventory/web/components"
+
+	"github.com/bketelsen/inventory"
+	"github.com/bketelsen/inventory/web/layouts"
+)
+
+templ DashboardInitial(reports []inventory.Report, platform, host string) {
+	@layouts.Base("Inventory Dashboard") {
+		<div class="drawer lg:drawer-open" id="inventory-root" data-signals={ fmt.Sprintf("{platform: '%s', host: '%s'}", platform, host) } data-on-load="@get('/dashboard/data')">
+			<input id="my-drawer-3" type="checkbox" class="drawer-toggle"/>
+			<div class="drawer-content flex flex-col">
+				<!-- Navbar -->
+				<div class="navbar bg-base-300 w-full">
+					<div class="flex-none lg:hidden">
+						<label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								class="inline-block h-6 w-6 stroke-current"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M4 6h16M4 12h16M4 18h16"
+								></path>
+							</svg>
+						</label>
+					</div>
+					<div class="flex-none">
+						<a class="btn btn-square btn-ghost" href="/">
+							@components.BarcodeIcon()
+						</a>
+					</div>
+					<div class="mx-2 flex-1 px-2 text-xl">Inventory Dashboard</div>
+				</div>
+				<!-- Page content here -->
+				<div
+					class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
+				>
+					@components.Dashboard(reports)
+				</div>
+				<!-- END Page content -->
+			</div>
+			<div class="drawer-side bg-base-300">
+				<label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
+				<!-- Sidebar content here -->
+				@Filters(reports)
+			</div>
+		</div>
+	}
+}
+
+templ Filters(reports []inventory.Report) {
+	<ul id="filters" class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+		<!-- Sidebar content here -->
+		if len(reports) > 0 {
+			<li>
+				<a>Filter Servers</a>
+				<ul class="p-2">
+					for _, report := range reports {
+						<li>
+							<a href={ templ.SafeURL(fmt.Sprintf("/?host=%s", report.Host.HostName)) }>
+								{ report.Host.HostName }
+							</a>
+						</li>
+					}
+					<li>
+						<a href={ templ.SafeURL("/") }>
+							All Servers
+						</a>
+					</li>
+				</ul>
+			</li>
+		}
+		if len(reports) > 0 {
+			<li>
+				<a>Filter Platform</a>
+				<ul class="p-2">
+					<li>
+						<a href={ templ.SafeURL(fmt.Sprintf("/?platform=%s", "Docker")) }>Docker</a>
+					</li>
+					<li>
+						<a href={ templ.SafeURL(fmt.Sprintf("/?platform=%s", "Incus")) }>Incus</a>
+					</li>
+					<li>
+						<a href={ templ.SafeURL("/") }>
+							All Platforms
+						</a>
+					</li>
+				</ul>
+			</li>
+		}
+		<li>
+			<a href="https://bketelsen.github.io/inventory">
+				Documentation
+				@components.InfoIcon()
+			</a>
+		</li>
+		<li>
+			<a href="https://github.com/bketelsen/inventory">
+				Github
+				@components.GithubIcon()
+			</a>
+		</li>
+	</ul>
+}

@@ -1,0 +1,52 @@
+package components 
+
+import "github.com/bketelsen/inventory"
+
+templ ContainerList(reports []inventory.Report) {
+	<div class="overflow-x-auto bg-base-100">
+		<table class="table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th>Host</th>
+					<th>ID</th>
+					<th>IP</th>
+					<th>Ports</th>
+					<th>HostName</th>
+					<th>Image</th>
+					<th>Platform</th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, report := range reports {
+					for _, container := range report.Containers {
+						<tr>
+							<td>
+								{ report.Host.HostName }
+							</td>
+							<td>
+								{ container.ContainerID }
+							</td>
+							<td>{ container.IP.String() }</td>
+							<td>
+								for _, port := range container.Ports {
+									{ port }
+									<br/>
+								}
+							</td>
+							<td>
+								{ container.HostName }
+							</td>
+							<td>
+								{ container.Image }
+							</td>
+							<td>
+								{ container.Platform.String() }
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+}

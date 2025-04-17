@@ -1,0 +1,44 @@
+package components 
+
+import (
+	"strconv"
+	"github.com/bketelsen/inventory"
+)
+
+templ ServiceList(reports []inventory.Report) {
+	<div class="overflow-x-auto bg-base-100">
+		<table class="table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th>Server</th>
+					<th>Name</th>
+					<th>Listen</th>
+					<th>Unit</th>
+				</tr>
+			</thead>
+			<tbody>
+					for _, report := range reports {
+						for _, service := range report.Services {
+							<tr>
+								<td>
+									{ report.Host.HostName }
+								</td>
+								<td>
+									{ service.Name }
+								</td>
+								<td>
+								for _, l := range service.Listeners {
+									{ l.ListenAddress }:{ strconv.Itoa(int(l.Port)) }/{ l.Protocol }<br/>
+								}
+								</td>
+								<td>
+									{ service.Unit }
+								</td>
+							</tr>
+						}
+					}
+			</tbody>
+		</table>
+	</div>
+}

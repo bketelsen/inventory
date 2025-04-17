@@ -1,0 +1,82 @@
+package components
+
+import (
+	"fmt"
+	"github.com/bketelsen/inventory"
+)
+
+templ Dashboard(reports []inventory.Report) {
+	<div
+		id="inventory-container"
+		class="h-full relative rounded p-2 my-2 mx-28"
+	>
+		<main>
+			<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+				<div class="grid grid-cols-12 gap-4 md:gap-6">
+					<div class="stats col-span-12 stats-vertical lg:stats-horizontal bg-base-200 shadow-lg">
+						@Metric("Servers", fmt.Sprintf("%d", len(reports)), "Hosts Reporting Data", "mdi:server-network")
+						@Metric("Services", fmt.Sprintf("%d", serviceCount(reports)), "Services Running", "mdi:gear-outline")
+						@Metric("Listeners", fmt.Sprintf("%d", listenerCount(reports)), "Network Listeners", "mdi:network")
+						@Metric("Containers", fmt.Sprintf("%d", containerCount(reports)), "Containers Running", "mdi:train-car-container")
+					</div>
+					<div class="col-span-12">
+						<div class="card card-border bg-base-200 shadow-lg">
+							<div class="card-body">
+								<h2 class="card-title">Servers</h2>
+								@ServerList(reports)
+							</div>
+						</div>
+					</div>
+					<div class="col-span-12">
+						<div class="card bg-base-200 shadow-lg">
+							<div class="card-body">
+								<h2 class="card-title">Reported Services</h2>
+								@ServiceList(reports)
+							</div>
+						</div>
+					</div>
+					<div class="col-span-12">
+						<div class="card bg-base-200 shadow-lg">
+							<div class="card-body">
+								<h2 class="card-title">Running Containers</h2>
+								@ContainerList(reports)
+							</div>
+						</div>
+					</div>
+					<div class="col-span-12">
+						<div class="card bg-base-200 shadow-lg">
+							<div class="card-body">
+								<h2 class="card-title">Network Listeners</h2>
+								@ListenerList(reports)
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+}
+
+func serviceCount(reports []inventory.Report) int {
+	count := 0
+	for _, report := range reports {
+		count += len(report.Services)
+	}
+	return count
+}
+
+func listenerCount(reports []inventory.Report) int {
+	count := 0
+	for _, report := range reports {
+		count += len(report.Listeners)
+	}
+	return count
+}
+
+func containerCount(reports []inventory.Report) int {
+	count := 0
+	for _, report := range reports {
+		count += len(report.Containers)
+	}
+	return count
+}

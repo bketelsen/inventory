@@ -1,0 +1,12 @@
+package components 
+
+templ Metric(title string, value string, description string, iconName string) {
+	<div class="stat">
+		<div class="stat-figure text-primary">
+			@Icon(iconName, "height", "none", "class", "w-12 h-12", "viewbox", "0 0 24 24", "fill", "currentColor")
+		</div>
+		<div class="stat-title">{ title }</div>
+		<div class="stat-value">{ value }</div>
+		<div class="stat-desc">{ description }</div>
+	</div>
+}

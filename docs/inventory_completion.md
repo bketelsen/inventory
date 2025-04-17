@@ -17,7 +17,7 @@ See each sub-command's help for details on how to use the generated script.
 ## Options inherited from parent commands
 
 ```
-  -c, --config-file string    (default "/home/runner/work/inventory/inventory/inventory.yml")
+  -c, --config-file string    (default "/home/bjk/inventory/inventory.yml")
       --log-level log        logging level [debug|info|warn|error] (default info)
 ```
 
