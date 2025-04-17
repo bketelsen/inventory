@@ -48,6 +48,15 @@ func (r *Report) DisplayTime() string {
 	return r.Timestamp.Format(time.UnixDate)
 }
 
+func (r *Report) HasPlatform(platform string) bool {
+	for _, c := range r.Containers {
+		if c.Platform.String() == platform {
+			return true
+		}
+	}
+	return false
+}
+
 // Host represents the host information
 // It contains the hostname, IP address, location, and description of the host.
 // The IP address is represented as a string to allow for both IPv4 and IPv6 addresses.

@@ -5,8 +5,26 @@ version: "3"
 env:
   GO111MODULE: on
   GOPROXY: https://proxy.golang.org,direct
+  STATIC_DIR: "web/static"
+
+interval: 1s
 
 tasks:
+  tools:
+    platforms:
+      [
+        linux,
+        darwin/arm64,
+      ]
+    cmds:
+      - platforms: [linux/amd64]
+        cmd: test -f bins/tailwindcli || wget -O bins/tailwindcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v2.1.12/tailwindcss-extra-linux-x64
+
+      - platforms: [darwin/arm64]
+        cmd: test -f bins/tailwindcli || wget -O bisn/tailwindcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v2.1.12/tailwindcss-extra-macos-arm64
+
+      - chmod +x bins/tailwindcli
+      - go install github.com/air-verse/air@v1.61.7
   dev:
     desc: Setup git hooks
     cmds:
@@ -28,17 +46,90 @@ tasks:
     cmds:
       - docker run --privileged --rm tonistiigi/binfmt --install all
 
+  build:styles:
+    desc: Build the styles
+    sources:
+      - "./web/**/*.html"
+      - "./web/**/*.ts"
+      - "./web/**/*.templ"
+      - "./web/**/*.go"
+    generates:
+      - $STATIC_DIR/index.css
+    cmds:
+      - bins/tailwindcli -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css
+
+  build:templ:
+    cmds:
+      - templ generate
+    sources:
+      - "**/*.templ"
+    generates:
+      - "**/*_templ.go"
+
   build:
     desc: Build the binary
     sources:
       - ./**/*.go
-      - ./**/*.tpl
+      - ./**/*.templ
     generates:
       - ./inventory
     cmds:
-      - templ generate
       - go build ./cmd/inventory
-      - ./scripts/clidocs.sh
+    deps:
+      - build:styles
+      - build:templ
+
+  live:styles:
+    desc: Build the styles
+    watch: true
+    sources:
+      - "./web/**/*.html"
+      - "./web/**/*.ts"
+      - "./web/**/*.templ"
+      - "./web/**/*.go"
+    generates:
+      - $STATIC_DIR/index.css
+    cmds:
+      - bins/tailwindcli -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css
+
+  live:templ:
+    cmds:
+      - templ generate --watch --proxy="http://localhost:8080" --open-browser=false
+
+  live:server:
+    cmds:
+      - |
+        air \
+         -build.cmd "go build -o tmp/main -tags dev ./cmd/inventory" \
+         -build.bin "tmp/main" \
+         -build.args_bin "server" \
+         -build.delay "100" \
+         -build.exclude_dir "webold,bins,dist,docs,manpages,scripts,data,node_modules,web/libs/datastar/node_modules,web/libs/lit-html/node_modules" \
+         -build.include_ext "go" \
+         -build.stop_on_error "false" \
+         -build.send_interrupt "true" \
+         -build.kill_delay "200" \
+         -misc.clean_on_exit "true"
+
+  live:reload:
+    cmds:
+      - |
+        air \
+        -build.cmd "templ generate --notify-proxy" \
+        -build.bin "true" \
+        -build.delay "300" \
+        -build.exclude_dir "" \
+        -build.include_dir "$STATIC_DIR" \
+        -build.include_ext "js,css" \
+        -build.send_interrupt "true" \
+        -build.kill_delay "200"
+
+  live:
+    deps:
+      - live:templ
+      - live:styles
+      - live:server
+      - live:reload
 
   install:
     desc: Install the binary locally

@@ -4,6 +4,7 @@ go 1.24.0
 
 require (
 	github.com/a-h/templ v0.3.857
+	github.com/benbjohnson/hashfs v0.2.2
 	github.com/bketelsen/inclient v0.0.5
 	github.com/bketelsen/toolbox v0.9.0
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
@@ -17,6 +18,20 @@ require (
 	github.com/spf13/viper v1.20.1
 	github.com/thediveo/enumflag/v2 v2.0.7
 	go.uber.org/automaxprocs v1.6.0
+)
+
+require (
+	github.com/delaneyj/gostar v0.8.0 // indirect
+	github.com/goccy/go-json v0.10.5 // indirect
+	github.com/google/pprof v0.0.0-20250317173921-a4b03ec1a45e // indirect
+	github.com/igrmk/treemap/v2 v2.0.1 // indirect
+	github.com/samber/lo v1.47.0 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+)
+
+require (
+	github.com/go-chi/chi/v5 v5.2.1
+	github.com/starfederation/datastar v0.21.4
 )
 
 //replace github.com/bketelsen/toolbox => ../toolbox
@@ -102,7 +117,7 @@ require (
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/oauth2 v0.28.0 // indirect
-	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/sync v0.12.0
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/term v0.30.0 // indirect
 	golang.org/x/text v0.23.0 // indirect

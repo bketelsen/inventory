@@ -1,0 +1,37 @@
+package components 
+
+import (
+	"fmt"
+	"github.com/bketelsen/inventory"
+)
+
+templ ServerList(reports []inventory.Report) {
+	<div class="overflow-x-auto bg-base-100">
+		<table class="table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th></th>
+					<th>Name</th>
+					<th>IP</th>
+					<th>Location</th>
+					<th>Description</th>
+					<th>Last Update</th>
+				</tr>
+			</thead>
+			<tbody>
+				for i, r := range reports {
+					<!-- row 1 -->
+					<tr>
+						<th>{ fmt.Sprintf("%d", i+1) }</th>
+						<td>{ r.Host.HostName }</td>
+                        <td>{ r.Host.IP }</td>
+						<td>{ r.Host.Location }</td>
+						<td>{ r.Host.Description }</td>
+						<td>{ r.DisplayTime() }</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}

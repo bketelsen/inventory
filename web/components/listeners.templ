@@ -1,0 +1,44 @@
+package components 
+
+import (
+	"github.com/bketelsen/inventory"
+	"strconv"
+)
+
+templ ListenerList(reports []inventory.Report) {
+	<div class="overflow-x-auto bg-base-100">
+		<table class="table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th>Host</th>
+					<th>Address</th>
+					<th>Port</th>
+					<th>PID</th>
+					<th>Program</th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, report := range reports {
+					for _, listener := range report.Listeners {
+						<tr>
+							<td>
+								{ report.Host.HostName }
+							</td>
+							<td>
+								{ listener.ListenAddress.String() }
+							</td>
+							<td>{ strconv.Itoa(int(listener.Port)) }</td>
+							<td>
+								{ strconv.Itoa(listener.PID) }
+							</td>
+							<td>
+								{ listener.Program }
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+}

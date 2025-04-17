@@ -8,6 +8,10 @@ before:
     # You may remove this if you don't use go modules.
     - go mod tidy
     - go install github.com/a-h/templ/cmd/templ@latest
+    - mkdir -p bins
+    - wget -O bins/tailwindcli https://github.com/dobicinaitis/tailwind-cli-extra/releases/download/v2.1.12/tailwindcss-extra-linux-x64
+    - chmod +x bins/tailwindcli
+    - bins/tailwindcli -c tailwind.config.js -i web/styles/styles.css -o web/static/index.css
     - templ generate
     - ./scripts/completions.sh
     - ./scripts/manpages.sh

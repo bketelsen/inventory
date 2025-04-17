@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.7.3
+### Released 2025-04-14
+### ## Changelog
+### Bug fixes
+* de10231de41ec2cb51b269d606024b032ed13a74: fix: manifest (#69) (@bketelsen)
+
+
+---
+Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
+## v0.6.0
+### Released 2025-04-14
+### ## Changelog
+### New Features
+* ff42b7e10374c16fb08a997edf1eefd286bd1923: feat(client): enable client on non-linux (#64) (@bketelsen)
+### Other work
+* 21c1f56fda3ee1bafe994ad99c9ed2ec0fa14646: [create-pull-request] automated change (#62) (@github-actions[bot])
+
+
+---
+Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
+
 ## v0.5.1
 ### Released 2025-04-11
 ### ## Changelog
@@ -33,24 +55,6 @@ Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
 * a468d93d1c77d442be31e31b6ca64160ca35a683: Add Changeling (#49) (@bketelsen)
 * 25be41f6f930f8e93de5a6dad6a1032720ea017b: Update Taskfile.yml (#50) (@bketelsen)
 * 322a2ab4a5f308f4abc3dcac40986423555483db: chore: update goreleaser config (#46) (@bketelsen)
-
-
----
-Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
-
-## v0.4.2
-### Released 2025-04-08
-### ## Changelog
-* 40270d87c0e923221d3585e9a826a79565975fbd fix(goreleaser): another attempt (#41)
-
-
----
-Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
-
-## v0.3.3
-### Released 2025-04-01
-### ## Changelog
-* ce191815d529cdaeabafafc0fdadc3e1ee607a08 chore: update deps (#36)
 
 
 ---
