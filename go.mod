@@ -1,6 +1,7 @@
 module github.com/bketelsen/inventory
 
-go 1.24.0
+go 1.24.2
+
 require (
 	github.com/a-h/templ v0.3.857
 	github.com/benbjohnson/hashfs v0.2.2
