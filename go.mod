@@ -1,7 +1,6 @@
 module github.com/bketelsen/inventory
 
 go 1.24.0
-
 require (
 	github.com/a-h/templ v0.3.857
 	github.com/benbjohnson/hashfs v0.2.2
@@ -11,7 +10,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf
 	github.com/docker/docker v28.0.4+incompatible
-	github.com/jackpal/gateway v1.0.16
+	github.com/jackpal/gateway v1.1.1
 	github.com/lxc/incus/v6 v6.11.0
 	github.com/muesli/roff v0.1.0
 	github.com/muesli/termenv v0.16.0
