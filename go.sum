@@ -12,8 +12,8 @@ github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiE
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/benbjohnson/hashfs v0.2.2 h1:vFZtksphM5LcnMRFctj49jCUkCc7wp3NP6INyfjkse4=
 github.com/benbjohnson/hashfs v0.2.2/go.mod h1:7OMXaMVo1YkfiIPxKrl7OXkUTUgWjmsAKyR+E6xDIRM=
-github.com/bketelsen/inclient v0.2.0 h1:EL5vLoILpeCCgVnrr61YAJVc9OinYrC+lRNM5w0Z4eM=
-github.com/bketelsen/inclient v0.2.0/go.mod h1:vXG1/L1e65+OEXW8kvFnHcpEG5LoZkhP8Oa2gsU+WyU=
+github.com/bketelsen/inclient v0.3.0 h1:y9VGFg4oXK/677bt8HimzJxwWezBIBb4IqjmCIq+9bQ=
+github.com/bketelsen/inclient v0.3.0/go.mod h1:ke+RfjPjmgPH+rJKlide3QPXn8/kHe2N604ZO4mcJYw=
 github.com/bketelsen/toolbox v0.9.0 h1:ZPaM85ROv69+rq0JTJ5aEQCN+PqPnDF2OweffWA4YEk=
 github.com/bketelsen/toolbox v0.9.0/go.mod h1:XGfiiH/z6wN/iwKmVSKoiv6Iji0r3rnjHY+dkM+ArhM=
 github.com/bmatcuk/doublestar/v4 v4.8.1 h1:54Bopc5c2cAvhLRAzqOGCYHYyhcDHsFF4wWIR5wKP38=
