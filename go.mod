@@ -3,7 +3,7 @@ module github.com/bketelsen/inventory
 go 1.24.2
 
 require (
-	github.com/a-h/templ v0.3.865
+	github.com/a-h/templ v0.3.887
 	github.com/benbjohnson/hashfs v0.2.2
 	github.com/bketelsen/inclient v0.3.0
 	github.com/bketelsen/toolbox v0.9.0
